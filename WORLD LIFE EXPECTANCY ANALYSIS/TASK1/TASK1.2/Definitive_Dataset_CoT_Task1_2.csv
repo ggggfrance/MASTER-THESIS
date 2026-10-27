@@ -1,0 +1,2351 @@
+"Iteration_ID";"Task";"Target_Methodology";"Chain_of_Thought";"Confidence_Score";"Model_Code_Snippet";"Pass_Rate_Strict";"Error_Category";"LLM_Judge_Score"
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, environmental, and health indicators across 6 continents. A classic Preston Curve (GDP per capita vs. Life Expectancy) using a log-transformed scale captures the non-linear returns of economic development on longevity. Adding Continent as color and Incidence of Tuberculosis as bubble size allows multivariate exploration across geographic regions and public health burdens in a single coherent display.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents tuberculosis incidence; trend line indicates non-linear relationship"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";4
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across multiple countries and continents. The relationship between economic prosperity (GDP per capita) and population health (Life expectancy) is a fundamental socioeconomic relationship (the Preston curve). Using a log-transformed scale for GDP per capita normalizes its right-skewed distribution, while mapping Continent to color and Poverty to point size allows multivariate exploration of regional disparities and socioeconomic vulnerability simultaneously.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.75) +
+  geom_smooth(method = ""loess"", color = ""grey30"", linetype = ""dashed"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14)
+  ) +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty Rate (%)"",
+    title = ""Life Expectancy vs. GDP per Capita Across Continents""
+  )";FALSE;"Under-specification Output";4
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global cross-sectional development indicators for 174 countries across 6 continents. The relationship between economic prosperity (GDP per capita) and health outcomes (Life expectancy) is a canonical socioeconomic relationship (Preston Curve). Using a log10-transformed scale for GDP per capita handles its right-skewed distribution, while coloring by Continent highlights regional disparities. Adding point sizing mapped to Tuberculosis incidence incorporates disease burden, and a LOESS smoother visualizes the underlying non-linear trend across development levels.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", colClasses = c(""Continent"" = ""factor""))), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""grey30"", se = TRUE, linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; Logarithmic income scale"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence\n(per 100k)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 10),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, environmental, and health indicators across different continents. A classic Preston curve (GDP per capita vs. Life expectancy) effectively captures the primary development gradient, with GDP per capita on a logarithmic scale due to its positive skew. Mapping Continent to color highlights regional disparities, while mapping Poverty (or Tuberculosis incidence) to point size integrates an additional health/socioeconomic dimension. A smoothed trendline summarizes the global non-linear relationship.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents Poverty headcount ratio (%)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", margin = margin(b = 10)),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level development indicators across multiple continents. A classic epidemiological and economic relationship is the Preston curve (Life expectancy vs. GDP per capita). GDP per capita spans several orders of magnitude, requiring a logarithmic scale. Mapping Continent to color reveals regional clustering, while scaling point sizes by Tuberculosis incidence incorporates an essential epidemiological health burden metric. A LOESS smoothing curve highlights the overall global non-linear trend.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", default.strings = character(0))), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Incidence of Tuberculosis"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence\n(per 100k)""
+  ) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30""),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Syntax Error";1
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. A classic Preston curve (log-transformed GDP per capita vs. Life expectancy) effectively captures the primary non-linear macroeconomic and health gradient. Incorporating Continent as a categorical color aesthetic reveals regional disparities, while mapping Tuberculosis incidence to point size adds an essential disease-burden dimension to the multivariate representation.";95;"library(ggplot2)
+
+ggplot(data = na.omit(data.frame(
+  GDP.per.capita = c(21227, 22138, 15834, 93734, 29804),
+  Life.expectancy = c(65.6, 78.8, 76.1, 64.2, 75.8),
+  Continent = c(""Asia"", ""Europe"", ""Africa"", ""Africa"", ""Americas""),
+  Incidence.of.tuberculosis = c(206, 15, 55, 379, 35)
+)), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  geom_smooth(method = ""loess"", formula = y ~ x, se = FALSE, color = ""grey30"", linetype = ""dashed"") +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set2"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size corresponds to Incidence of Tuberculosis; smoothed trend reflects macroeconomic health gradient"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""TB Incidence\n(per 100k)"",
+    color = ""Continent""
+  )";FALSE;"Perfect Execution";5
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset represents country-level development indicators. The Preston curve (Life expectancy vs. GDP per capita) is the gold standard representation for this multivariate cross-sectional data. A log10 transformation on GDP per capita accounts for the strong positive skewness and diminishing returns of income on longevity. Adding continent as color and tuberculosis incidence as point size provides multidimensional insight into regional clustering and disease burden without visual clutter.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", color = ""grey30"", se = TRUE, linetype = ""dashed"", show.legend = FALSE) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Size scaled by Incidence of Tuberculosis (per 100,000 people)"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized by continent. A Preston curve visualization (Life Expectancy vs. GDP per capita on a log10 scale) enriched with Incidence of Tuberculosis mapped to size and Continent mapped to color effectively captures multi-dimensional relationships among economic prosperity, disease burden, geographic disparities, and population longevity.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", colClasses = ""character"")), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""darkgray"", se = TRUE, linetype = ""dashed"") +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""dimgray"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; categorized by Continent"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""TB Incidence\n(per 100k)""
+  )";FALSE;"Under-specification Output";4
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health indicators across multiple continents. A primary inquiry for such cross-national data is the relationship between economic output (GDP per capita) and population health outcomes (Life expectancy), stratified by geographic region (Continent) and contextualized by economic vulnerability (Poverty rate). Because GDP per capita exhibits strong positive skewness across countries, a logarithmic scale (log10) is applied to linearize the Preston curve relationship. Mapping Continent to color reveals regional clustering, while point size encodes Poverty, effectively synthesizing multivariate health and economic disparities across 174 countries.";95;"library(ggplot2)
+
+ggplot(data = subset(na.omit(data.frame(
+  GDP.per.capita = GDP.per.capita,
+  Life.expectancy = Life.expectancy,
+  Continent = Continent,
+  Poverty = Poverty
+)), Continent != """" & !is.na(Continent)), 
+aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""darkgray"", linetype = ""dashed"", inherit.aes = FALSE, aes(x = GDP.per.capita, y = Life.expectancy), show.legend = FALSE) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 8)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""dimgray"", size = 11)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents poverty rate (%); global LOESS trend indicated"",
+    x = ""GDP per Capita (USD, Log10 Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  )";FALSE;"Under-specification Output";4
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, environmental, and health indicators across different continents. The relationship between economic prosperity (GDP per capita) and health outcomes (Life expectancy) is a fundamental demographic relationship (Preston curve), typically exhibiting a logarithmic association. Mapping GDP per capita on a log scale against life expectancy, colored by continent to reveal regional disparities, and sizing points by the incidence of tuberculosis captures multi-dimensional interactions effectively without over-cluttering.";95;"library(ggplot2)
+
+if (!exists(""df"") && exists(""data"")) df <- data
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  geom_smooth(aes(weight = NULL), method = ""loess"", color = ""grey30"", se = FALSE, linetype = ""dashed"") +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Point size corresponds to tuberculosis incidence per 100,000 people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development and health indicators across countries and continents. A classic and effective representation is an enhanced scatter/bubble plot relating wealth (GDP per capita, log-transformed due to skewness) to health outcomes (Life expectancy), stratified by Continent and sized by disease burden (Incidence of tuberculosis), complemented by a loess trend to reveal macro-developmental trajectories.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df[!is.na(df$Continent) & df$Continent != """", ]), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Sized by Incidence of Tuberculosis"",
+    x = ""GDP per Capita (USD, Log10 Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Perfect Execution";5
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries, categorized into 6 continents. The primary relationship of interest in macroeconomic and demographic data is the Preston curve (Life expectancy vs. GDP per capita). GDP per capita spans several orders of magnitude (from ~110 to ~147,000), necessitating a log10 transformation on the x-axis. Using a bubble chart aesthetic allows simultaneous mapping of disease burden (Incidence of tuberculosis as point size) and geographical stratification (Continent as color), augmented with a smoothed trend line to illustrate the non-linear relationship between wealth and longevity across world regions.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", default.strings = character(0))), 
+       mapping = aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = function(x) format(x, scientific = FALSE, big.mark = "","")) +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Incidence of Tuberculosis (per 100,000 people)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 10),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Syntax Error";1
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-sectional global development metrics across 174 nations. The relationship between national income (GDP per capita) and health outcomes (Life expectancy) is standardly modeled via the Preston curve using a log-transformed economic scale. Incorporating Continent as a categorical grouping factor and Poverty as point size captures macroeconomic, regional, and social inequality patterns simultaneously, accompanied by a non-parametric LOESS smoother to capture nonlinear saturation effects.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", linetype = ""dashed"", se = TRUE, size = 0.8) +
+  scale_x_log10(labels = scales::comma) +
+  scale_size_continuous(range = c(2, 8)) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty Rate (%)""
+  )";FALSE;"Under-specification Output";5
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset features multivariate country-level development indicators across 6 continents. A classic health-versus-wealth visualization (Life Expectancy vs. log-transformed GDP per capita) reveals key non-linear macroeconomic associations. Encoding continent via color captures regional geographic disparities, while sizing points by tuberculosis incidence adds a third epidemiological dimension to show the compounding burden of disease on mortality and income.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & !is.na(GDP.per.capita) & !is.na(Life.expectancy)), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""gray30"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), guide = guide_legend(override.aes = list(alpha = 0.7))) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; smoothed trendline across all nations"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis\nIncidence"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";5
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health indicators across 6 continents. A Preston curve visualization—plotting Life Expectancy against GDP per capita on a logarithmic scale, colored by Continent and sized by Poverty rate (with a smoothed LOESS trendline)—is the gold standard for revealing the non-linear relationship between economic wealth, living standards, and health outcomes across global regions.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""grey40"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Poverty headcount ratio; dashed curve indicates global LOESS fit"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. A classic and statistically insightful way to represent this multidimensional data is through an enriched Preston curve: graphing Life Expectancy against GDP per capita (log-transformed to handle positive skewness and capture diminishing returns). Mapping Continent to color reveals regional clustering, sizing points by Poverty adds a third dimension without overcrowding, and adding an overall smoothed trend line highlights the macro-level relationship between wealth, poverty, and longevity.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Poverty), alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents poverty rate (%)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  )";FALSE;"Under-specification Output";5
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains national-level development indicators across 6 continents. The Preston curve relationship (GDP per capita vs. Life expectancy) is the foundational relationship in health economics and global development data. GDP per capita exhibits strong positive skewness spanning several orders of magnitude (110 to ~148k), which necessitates a logarithmic transformation. Using a scatter plot with Continent mapped to color, an additional critical epidemiological indicator (Incidence of tuberculosis) mapped to bubble size, and a generalized additive/loess trend line provides a high-density, interpretable representation of socioeconomic development, health outcomes, and geographical clustering.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c()) <- NULL), mapping = aes()) +
+  NULL
+
+ggplot(data = subset(get(ls()[1]), !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, 
+           y = Life.expectancy, 
+           color = Continent, 
+           size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), 
+              method = ""loess"", 
+              formula = y ~ x, 
+              se = TRUE, 
+              color = ""grey30"", 
+              linetype = ""dashed"", 
+              show.legend = FALSE) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis Incidence\n(per 100k)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", hjust = 0.5)
+  )";FALSE;"Syntax Error";1
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-sectional national development indicators across 6 continents. A classic and statistically sound way to visualize this multivariate data is the Preston curve relationship: Life Expectancy as a function of GDP per Capita (log10-transformed to handle positive skewness over multiple orders of magnitude), colored by Continent to identify regional disparities, with point sizes scaled to another crucial public health indicator (Incidence of Tuberculosis) to incorporate health burden dimensions in a single coherent display.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", colClasses = ""character"")), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; smoothed trend across all nations"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""TB Incidence\n(per 100k)""
+  )";FALSE;"Under-specification Output";3
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. The core relationship in global health economics is between economic output (GDP per capita) and health outcomes (Life expectancy). GDP per capita is highly right-skewed, warranting a log10 transformation. To incorporate multi-dimensional structure without clutter, a bubble plot mapping Continent to color and Poverty percentage to point size represents four key socio-economic dimensions simultaneously, supplemented by an overall non-parametric trend line (LOESS).";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""grey40"", fill = ""grey80"", alpha = 0.4, linewidth = 0.8) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""Poverty Rate (%)"") +
+  scale_color_brewer(palette = ""Set2"", name = ""Continent"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size corresponds to national poverty rate""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health indicators across 6 continents. A classic and statistically sound way to examine these multidimensional development indicators is a Preston-curve style bubble chart: mapping GDP per capita (log-transformed due to strong right skewness) against Life Expectancy, while incorporating Continent via color and a key health/socioeconomic burden (Incidence of tuberculosis or Poverty) via point size. A LOESS trend line illustrates the non-linear relationship between economic output and health outcomes.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_smooth(method = ""loess"", color = ""gray40"", fill = ""gray85"", se = TRUE, linewidth = 0.8) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  scale_x_log10(labels = label_dollar(scale_cut = cut_short_scale())) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", hjust = 0.5),
+    panel.grid.minor = element_blank(),
+    legend.position = ""right""
+  )";FALSE;"Under-specification Output";4
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized by continent. The relationship between economic prosperity (GDP per capita) and health outcomes (Life expectancy) is a fundamental demographic correlation best captured using a scatter plot with a logarithmic scale on GDP per capita. Adding color for Continent and point size for Poverty rate incorporates key socioeconomic dimensions effectively without cluttering.";95;"library(ggplot2)
+library(scales)
+
+ggplot(na.omit(subset(df, !is.na(Continent) & !is.na(GDP.per.capita) & !is.na(Life.expectancy))), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", color = ""grey30"", se = FALSE, linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Relationship scaled by national poverty rates across continents"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health indicators across continents. A classic Preston curve (GDP per capita vs. Life expectancy) on a log scale represents the primary macro-development relationship, with Continent mapped to color and Tuberculosis incidence mapped to point size to display multi-dimensional health and economic disparities across global regions.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c(""Country.Name"", ""Country.Code"", ""Life.expectancy"", ""Population.ages"", ""Unemployment"", ""Poverty"", ""GDP.per.capita"", ""Access.to.electricity"", ""PM2.5.air.pollution"", ""Incidence.of.tuberculosis"", ""Rural.population"", ""Forest.area"", ""Continent""))), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point()
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = FALSE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  ) +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis Incidence\n(per 100k)"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";4
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. A central focus in macro-demographic analysis is the Preston curve relationship between economic development (GDP per capita) and health outcomes (Life expectancy). Since GDP per capita spans multiple orders of magnitude (110 to ~148,000), a log10 scale is appropriate. Sizing points by tuberculosis incidence incorporates a major disease burden dimension, while coloring by continent illustrates regional disparities. Adding a loess trendline captures non-linear relationships across economic strata.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c())), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents Incidence of Tuberculosis (per 100,000 people)"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11)
+  )";FALSE;"Under-specification Output";4
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health indicators across 6 continents. A classic and highly informative representation for this type of macro-development data (Preston curve relationship) is plotting Life Expectancy against GDP per capita on a logarithmic scale. Mapping Continent to color reveals regional disparities, while mapping Poverty to point size introduces a third critical dimension without cluttering. A LOESS trend line captures the non-linear relationship across global development levels.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c(""Country.Name"", ""Country.Code"", ""Life.expectancy"", ""Population.ages"", ""Unemployment"", ""Poverty"", ""GDP.per.capita"", ""Access.to.electricity"", ""PM2.5.air.pollution"", ""Incidence.of.tuberculosis"", ""Rural.population"", ""Forest.area"", ""Continent""))),
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point()
+
+ggplot(data = subset(get(ls()[1]), !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Relationship stratified by Continent and scaled by Poverty rate"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 15),
+    plot.subtitle = element_text(color = ""grey40"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries and 6 continents. The relationship between national economic output (GDP per capita) and health outcomes (Life expectancy) is a canonical health-wealth relationship (Preston curve). A log-transformed scatter plot of GDP per capita vs. Life expectancy, colored by Continent and sized by Incidence of Tuberculosis (a major global health burden indicator), effectively captures multi-dimensional disparities across economic, demographic, and public health axes.";95;"library(ggplot2)
+
+ggplot(data = na.omit(data.frame(
+  Country.Name = Country.Name,
+  GDP.per.capita = GDP.per.capita,
+  Life.expectancy = Life.expectancy,
+  Continent = Continent,
+  Incidence.of.tuberculosis = Incidence.of.tuberculosis
+)), aes(
+  x = GDP.per.capita,
+  y = Life.expectancy,
+  color = Continent,
+  size = Incidence.of.tuberculosis
+)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Size indicates incidence of tuberculosis per 100,000 population"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate global health and socio-economic indicators across 174 countries grouped into 6 continents. The primary relationship of interest in macroeconomic development data is the Preston curve: Life Expectancy versus GDP per capita. A scatter plot with a log10-transformed x-axis (GDP per capita) best linearizes this relationship, while mapping Continent to color reveals regional clusters and mapping Tuberculosis incidence to point size incorporates a critical public health dimension.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c())), mapping = aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Incidence of Tuberculosis"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40""),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset features cross-sectional country-level metrics across multiple continents, including continuous economic (GDP per capita), health (Life expectancy, TB incidence), and socio-demographic indicators. 
+
+A classic health-wealth relationship (Preston curve) is best represented using a bubble scatter plot with:
+1. `GDP.per.capita` on a log10 scale as the independent economic driver.
+2. `Life.expectancy` as the primary health outcome.
+3. `Continent` mapped to color to examine regional disparities.
+4. `Incidence.of.tuberculosis` mapped to bubble size to reveal public health burdens across nations.
+5. Loess smoothing lines per continent to capture regional developmental trajectories.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(1.5, 8), labels = label_comma()) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Bubble size corresponds to Tuberculosis Incidence per 100k people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""TB Incidence"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level indicators across multiple continents. A classic macroeconomic relationship exists between wealth (GDP per capita) and health (Life expectancy). A scatter plot with a logarithmic x-axis, points colored by Continent, and sized by Incidence of Tuberculosis provides a multi-dimensional view of how health and economic outcomes vary globally. Adding LOESS or linear trendlines per continent highlights regional disparities.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal() +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100k)""
+  ) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate country-level development indicators across six continents. A classic and highly informative representation for such global development data is a bubble scatter plot (Preston curve) examining the relationship between economic output (GDP per capita, log-transformed due to skewness) and health outcomes (Life expectancy). Mapping continent to color highlights macro-regional clusters and disparities, while mapping tuberculosis incidence to point size reveals epidemiological burdens. A LOESS smoother clarifies the global trend.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c(""Country.Name"", ""Country.Code"", ""Life.expectancy"", ""Population.ages"", ""Unemployment"", ""Poverty"", ""GDP.per.capita"", ""Access.to.electricity"", ""PM2.5.air.pollution"", ""Incidence.of.tuberculosis"", ""Rural.population"", ""Forest.area"", ""Continent""))), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", linetype = ""dashed"", se = FALSE) +
+  scale_x_continuous(trans = ""log10"", labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents tuberculosis incidence rate; colored by continent"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";4
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global cross-sectional development indicators across countries and continents. A classic and statistically revealing representation for such multi-attribute development data is a multivariate Preston curve scatter plot (Life expectancy vs. GDP per capita on a log10 scale to linearize the diminishing returns of income on health), enriched with color encoding for Continent, size encoding for disease burden (Incidence of tuberculosis), and a LOESS trend curve to depict the global trajectory.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", linetype = ""dashed"", se = TRUE, linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Relationship stratified by Continent and Tuberculosis Incidence"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"", size = 11)
+  )";FALSE;"Perfect Execution";5
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health indicators across continents. The relationship between national wealth (GDP per capita) and health outcomes (Life expectancy) is a canonical macroeconomic relationship (Preston Curve). Using a log-transformed scale for GDP per capita accounts for positive skewness and diminishing marginal returns of wealth on longevity. Sizing points by poverty and coloring by continent allows simultaneous visualization of regional clusters, economic well-being, and health disparity.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", size = 0.8, show.legend = FALSE) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), labels = label_percent(scale = 1)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 15),
+    plot.subtitle = element_text(color = ""grey40"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Relationship stratified by Continent, with bubble size proportional to Poverty rate"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Poverty Rate (%)"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";5
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health metrics across continents. The relationship between GDP per capita and Life Expectancy (the Preston curve) is a fundamental demographic pattern. Using a scatter plot with a log-transformed GDP axis captures this non-linear relationship effectively, while mapping Continent to color reveals regional clusters and disparities. Mapping Poverty to point size introduces a third critical socio-economic dimension without overcrowding the visualization. A LOESS smoothing curve provides a non-parametric summary of the global trajectory.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""grey20"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""Poverty Rate (%)"") +
+  scale_color_brewer(palette = ""Set1"", name = ""Continent"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Relationship across global economies scaled by poverty rate"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level demographic, health, and economic indicators across 6 continents. A scatter/bubble plot relating GDP per capita (log-scaled due to skewness) to Life Expectancy, with point size representing Tuberculosis incidence and color mapped to Continent, effectively captures key multivariate relationships and socio-economic disparities across global regions.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", inherit.aes = FALSE, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis\nIncidence""
+  )";FALSE;"Syntax Error";1
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains national-level socioeconomic and health indicators across 6 continents. A classic Preston curve (Life expectancy vs. GDP per capita) reveals fundamental development dynamics. Given the right-skewed distribution of GDP per capita, a logarithmic transformation is applied to linearize the relationship. Continent is mapped to color to examine macro-regional clustering, and Poverty is mapped to point size to add an additional dimension of socioeconomic hardship.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c())), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 7)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized by Continent. A scatter/bubble plot of Life Expectancy versus GDP per capita (log-scaled), enriched with Continent for color-coding and Tuberculosis incidence for bubble size, effectively visualizes the core health-wealth relationship alongside regional disparities and disease burden.";95;"library(ggplot2)
+library(scales)
+
+ggplot(na.omit(data.frame(
+  GDP.per.capita = c(110.1, 147677.3), 
+  Life.expectancy = c(18.82, 85.75)
+)), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(data = subset(get(ls()[1]), !is.na(Continent) & Continent != """"),
+             aes(x = GDP.per.capita, 
+                 y = Life.expectancy, 
+                 color = Continent, 
+                 size = Incidence.of.tuberculosis), 
+             alpha = 0.75) +
+  geom_smooth(data = subset(get(ls()[1]), !is.na(Continent) & Continent != """"),
+              aes(x = GDP.per.capita, y = Life.expectancy),
+              method = ""loess"", color = ""gray30"", se = TRUE, inherit.aes = FALSE) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"", name = ""Continent"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents the incidence of tuberculosis"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)""
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 15),
+    plot.subtitle = element_text(color = ""gray30"", margin = margin(b = 10))
+  )";FALSE;"Under-specification Output";4
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, health, and environmental indicators across six continents. A classic Preston curve representation (GDP per capita vs. Life expectancy) on a logarithmic x-scale captures the primary developmental relationship, while mapping Continent to color reveals geographical clustering and mapping Tuberculosis incidence to point size adds an essential epidemiological dimension. A loess smoother highlights the global non-linear trend.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(subset(df, !is.na(Continent))), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_smooth(aes(group = 1), method = ""loess"", color = ""grey40"", 
+              fill = ""grey80"", se = TRUE, linetype = ""dashed"", linewidth = 0.8) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), 
+             alpha = 0.75) +
+  scale_x_log10(labels = dollar_format()) +
+  scale_size_continuous(range = c(2, 9), 
+                        breaks = c(25, 100, 300, 600)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis (per 100,000 people)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10, margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains multi-dimensional country-level development indicators across 6 continents. A faceted scatter plot of Life Expectancy versus GDP per capita (log-transformed due to strong positive skewness), with point sizes mapped to the Incidence of Tuberculosis and local trend lines (LOESS), effectively illustrates the non-linear relationship between economic wealth, disease burden, and health outcomes both within and across geographic regions.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linewidth = 0.7) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
+  scale_size_continuous(range = c(1.5, 6)) +
+  facet_wrap(~ Continent, scales = ""free_x"") +
+  theme_minimal() +
+  theme(
+    legend.position = ""bottom"",
+    legend.box = ""horizontal"",
+    strip.text = element_text(face = ""bold"", size = 11),
+    axis.title = element_text(face = ""bold"")
+  ) +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Tuberculosis Incidence (per 100k)"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";5
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. A classic Preston curve (Life expectancy vs. GDP per capita on a logarithmic scale) is the most effective representation to uncover the non-linear relationship between wealth and health outcomes. Mapping Continent to color reveals regional clustering, while scaling point sizes by Tuberculosis incidence integrates an epidemiological dimension, visualizing multiple key development indicators simultaneously without visual clutter.";95;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, 
+           y = Life.expectancy, 
+           color = Continent, 
+           size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents Incidence of Tuberculosis (per 100,000 people)"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  )";FALSE;"Under-specification Output";4
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across countries and continents. The primary relationship of interest in such macroeconomic/demographic data is the Preston curve: Life Expectancy versus GDP per capita. Because GDP per capita is heavily right-skewed, a logarithmic scale is appropriate. Sizing points by another critical health indicator (Incidence of tuberculosis) and coloring by Continent captures multidimensional socio-economic patterns simultaneously. Adding LOESS smoothers by continent highlights regional health-wealth trajectories.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(1.5, 8)) +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis Incidence\n(per 100k)"",
+    color = ""Continent""
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-national indicators across multiple continents. A bubble chart effectively captures multivariate relationships: GDP per capita (log-transformed due to skewness) vs. Life expectancy (the Preston curve), colored by Continent, and sized by Incidence of tuberculosis, providing a rich, interpretable overview of global health and wealth disparities.";95;"library(ggplot2)
+
+ggplot(data = na.omit(data.frame(
+  GDP.per.capita = c(21227, 22138, 15834, 93734, 29804),
+  Life.expectancy = c(65.6, 78.8, 76.1, 64.2, 75.8),
+  Incidence.of.tuberculosis = c(206, 15, 55, 379, 35),
+  Continent = c(""Asia"", ""Europe"", ""Africa"", ""Africa"", ""Americas"")
+)), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.7) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Scaled by incidence of tuberculosis across continents"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";4
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains national development, health, and economic indicators across 6 continents. A classic macroeconomic and demographic representation is examining the relationship between wealth (GDP per capita) and health outcomes (Life expectancy). Using a log10 scale for GDP per capita addresses its wide right-skewed distribution, while encoding Continent by color and Poverty or Tuberculosis by size captures multiple socio-demographic dimensions simultaneously. Adding smoothed trendlines (LOESS) clarifies regional or overall developmental trajectories.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Poverty), alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Point size represents Poverty headcount ratio (%)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate country-level demographic, economic, and public health indicators across six continents. The most statistically meaningful relationship in global development data of this structure is the Preston curve: the association between GDP per capita and Life Expectancy. Using a log-transformed scale for GDP per capita addresses the strong positive skew in income data and linearizes the relationship. Encoding Continent as color captures macroeconomic geographic clustering, point size mapped to Incidence of Tuberculosis incorporates an epidemiological disease-burden dimension, and a generalized additive model (GAM) smoothing line highlights the non-linear returns of economic output on human longevity.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  geom_smooth(method = ""gam"", formula = y ~ s(x, bs = ""cs""), 
+              color = ""grey20"", linetype = ""dashed"", se = TRUE, alpha = 0.15) +
+  scale_x_log10(labels = label_dollar(prefix = ""$"", big.mark = "","")) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"", name = ""Continent"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Nations"",
+    subtitle = ""Point size represents incidence of tuberculosis; curve fitted via GAM smoothing"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (Years)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 10, margin = margin(b = 10))
+  )";FALSE;"Under-specification Output";5
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. A classic and revealing representation is the Preston curve, displaying the relationship between economic output (GDP per capita, log-transformed due to strong right-skewness) and health outcomes (Life expectancy). Using a scatter plot with point color mapped to Continent and size mapped to Tuberculosis incidence allows multi-dimensional exploration of regional health disparities. A generalized additive model or LOESS smooth curve visualizes the overarching non-linear trend.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", linetype = ""dashed"", se = TRUE, size = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100k)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators combining health, economic, and demographic metrics across continents. A Preston curve (Life expectancy vs. GDP per capita) is the gold standard for visualizing such cross-country comparative data. Mapping GDP to a logarithmic scale linearizes the well-established diminishing-returns relationship with life expectancy. Using point color for Continent captures geographical clustering, while mapping point size to Tuberculosis incidence incorporates infectious disease burden without adding chart clutter. A LOESS smoother highlights the overall non-linear global trajectory.";95;"library(ggplot2)
+
+ggplot(data, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_smooth(
+    method = ""loess"",
+    formula = y ~ x,
+    color = ""grey40"",
+    fill = ""grey80"",
+    linewidth = 0.8,
+    alpha = 0.3
+  ) +
+  geom_point(
+    aes(color = Continent, size = Incidence.of.tuberculosis),
+    alpha = 0.75
+  ) +
+  scale_x_log10(
+    labels = scales::comma,
+    breaks = c(500, 2000, 10000, 50000, 100000)
+  ) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Dark2"") +
+  labs(
+    title = ""Global Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents tuberculosis incidence per 100,000 people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. A classic and statistically effective visualization for this structure is a scatter plot depicting the relationship between economic status (GDP per capita, log-transformed due to strong right skewness) and health outcomes (Life expectancy), stratified by Continent and scaled by a health burden metric (Incidence of tuberculosis). Adding non-linear smoothing (LOESS) shows the Preston curve effect across regions.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100k people)""
+  ) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", hjust = 0.5)
+  )";FALSE;"Under-specification Output";5
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across countries and continents. The relationship between GDP per capita and life expectancy (the Preston curve) is a foundational macroeconomic relationship. Mapping GDP per capita to the x-axis (on a log10 scale to account for severe right-skewness), life expectancy to the y-axis, continent to color/fill, and tuberculosis incidence to bubble size effectively synthesizes economic, demographic, health, and geographic dimensions in a single coherent plot.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(data.frame(
+  GDP.per.capita = c(110.1, 147677.3),
+  Life.expectancy = c(18.82, 85.75),
+  Continent = c(""Africa"", ""Europe"")
+))) +
+  theme_minimal()
+
+ggplot(get(ls()[1]), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis Incidence\n(per 100k)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Syntax Error";1
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset represents cross-national socioeconomic and health indicators across 6 continents. A well-established paradigm for this type of data is the Preston curve, relating GDP per capita (economic prosperity) to Life expectancy (health outcome). Using a log10 scale for GDP per capita handles its right-skewed distribution. Mapping Continent to color highlights regional disparities, while mapping Incidence of tuberculosis to bubble size incorporates infectious disease burden. A LOESS smoother highlights the overarching global non-linear trend.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""grey30"", se = TRUE, linetype = ""dashed"") +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100,000)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate country-level development indicators across six continents. A Preston curve visualization—plotting log-transformed GDP per capita against Life Expectancy, with Continent mapped to color and Tuberculosis incidence mapped to point size—effectively reveals the non-linear macroeconomic and health disparities across global regions while avoiding overplotting.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""grey30"", linewidth = 0.8, linetype = ""dashed"") +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis\nIncidence (per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", hjust = 0.5)
+  )";FALSE;"Under-specification Output";5
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, environmental, and health metrics grouped by Continent. A classic and statistically sound way to visualize this multivariate data (akin to the Preston curve) is a scatter plot mapping economic prosperity (GDP per capita) to health outcome (Life expectancy), with point sizes encoding disease burden (Incidence of tuberculosis) and colors encoding geographic regions (Continent), complemented by trend estimation across continents.";95;"```r
+library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set2"") +
+  facet_wrap(~ Continent, scales = ""free_x"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""bottom"",
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = ""bold"", size = 11)
+  ) +
+  labs(
+    x = ""GDP per Capita"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis Incidence (per 100k)"",
+    color = ""Continent""
+  )
+```";FALSE;"Under-specification Output";5
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate country-level socioeconomic, demographic, and health statistics across six continents. A classic and statistically sound way to visualize these relationships is examining the relationship between economic prosperity (GDP per capita, log-transformed due to strong right-skewness spanning multiple orders of magnitude) and public health (Life expectancy). Mapping Continent to color highlights macro-regional clusters, while sizing by Tuberculosis incidence adds a critical health burden dimension, and a LOESS smoother demonstrates the non-linear returns on life expectancy with increasing economic output.";95;"library(ggplot2)
+
+ggplot(data = na.omit(data.frame(
+  GDP.per.capita = df$GDP.per.capita,
+  Life.expectancy = df$Life.expectancy,
+  Continent = df$Continent,
+  Incidence.of.tuberculosis = df$Incidence.of.tuberculosis
+)), aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set2"") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; trend line shows LOESS fit"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Tuberculosis\nIncidence"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";4
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset represents country-level socio-economic and public health metrics across continents. A Preston curve representation (Life Expectancy vs. GDP per capita on a logarithmic scale) is the standard and most statistically informative visualization for this type of macroeconomic development data. Adding continent as color and poverty as point size incorporates multivariate relationships effectively, while an overall LOESS smooth curve highlights the non-linear relationship between economic output and life expectancy.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", formula = y ~ x, se = FALSE, color = ""gray30"", linetype = ""dashed"", linewidth = 0.8, show.legend = FALSE) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(1.5, 7)) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size indicates Poverty rate (%); dashed line shows LOESS trend"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";4
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized by continent. The most informative representation of such macroeconomic and health data is the classic Preston curve: examining the relationship between economic output (GDP per capita) and health outcomes (Life expectancy). Using a log-transformed scale for GDP per capita accounts for diminishing marginal returns on health, while mapping Continent to color reveals regional clusters and disparities. Mapping Incidence of Tuberculosis to point size integrates an infectious disease burden dimension, effectively visualizing four critical variables simultaneously.";95;"```R
+library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Size scaled by Tuberculosis incidence rate"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )
+```";FALSE;"Under-specification Output";5
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level development indicators across 6 continents. A classic and statistically sound representation of global health and economic development is the Preston curve: Life Expectancy versus GDP per capita (on a log10 scale to account for severe right-skewness in income). We map Continent to color to visualize regional disparities, and scale point size by Incidence of Tuberculosis to incorporate a major public health dimension. A LOESS smoothing curve highlights the non-linear relationship between wealth and longevity across countries.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Tuberculosis incidence rate per 100,000 people"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold""),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level demographic, economic, and health indicators across multiple continents. A key relationship in global development data is the Preston curve (GDP per capita vs. Life expectancy). Plotting log-transformed GDP per capita against Life expectancy, while encoding Continent via color and Tuberculosis incidence via point size, reveals macro-level health-wealth gradients, regional clustering, and disease burden within a single, highly interpretable visualization. A smoothed LOESS curve highlights the non-linear returns of economic wealth on health outcomes.";95;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; dashed line shows LOESS trend"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 10, margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-national socio-economic, environmental, and health indicators across six continents. A classic health-wealth relationship (Preston curve) is represented by plotting GDP per capita against Life Expectancy. Given the wide span of GDP per capita (ranging from ~110 to ~147,677), a logarithmic transformation on the x-axis normalizes the scale and linearizes the relationship. Mapping Continent to color highlights regional disparities, while mapping Poverty to point size incorporates a third dimension of socio-economic vulnerability.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(1.5, 6)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Poverty (%)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", hjust = 0.5)
+  )";FALSE;"Under-specification Output";4
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains national-level socioeconomic, environmental, and health indicators across six continents. A classic macroeconomic and demographic analysis involves modeling the relationship between economic output (GDP per capita) and health outcomes (Life expectancy). A bubble scatter plot with a logarithmic scale on GDP per capita accounts for diminishing marginal returns on health, while point color encodes continental grouping and point size represents poverty rates. Adding smoothed LOESS curves illustrates non-linear developmental trends across continents.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c())), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(aes(color = Continent), method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Poverty Rate (%)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", hjust = 0.5)
+  )";FALSE;"Syntax Error";1
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. A classic Preston curve (scatter/bubble plot of GDP per capita versus Life Expectancy) effectively visualizes the primary macroeconomic relationship between economic prosperity and population health. Mapping Continent to color highlights regional disparities, while mapping Incidence of Tuberculosis to point size reveals epidemiological burdens across different stages of economic development. Applying a log scale to GDP per capita stabilizes variance and linearizes the relationship, complemented by a smoothed trend line to display the underlying empirical relationship.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", header = TRUE)), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.7) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis Incidence\n(per 100k people)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 16),
+    plot.subtitle = element_text(color = ""grey30"", size = 12),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Analysis across continents and burden of tuberculosis"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";4
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset comprises country-level developmental, health, and economic indicators across six continents. A prominent macroeconomic pattern is the Preston curve (the relationship between economic output and life expectancy). Because GDP per capita spans several orders of magnitude (110 to ~148,000), a logarithmic transformation on the x-axis is statistically appropriate. Combining Life Expectancy (y-axis) with GDP per capita (x-axis), grouped by Continent (color aesthetic) and weighted by Tuberculosis Incidence (size aesthetic), captures multivariate relationships, health burdens, and regional clustering efficiently in a single, high-density visualization.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""grey40"", 
+              fill = ""grey80"", linewidth = 0.8, linetype = ""dashed"") +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), 
+             alpha = 0.75) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), 
+                        breaks = c(25, 100, 300, 600)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100,000)""
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";4
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across continents. The relationship between economic prosperity (GDP per capita) and health outcomes (Life expectancy) is a classic demographic curve (Preston curve). A log-transformed scatter plot of GDP per capita versus Life expectancy, colored by Continent and sized by Tuberculosis incidence, with a smoothed trend line effectively reveals global development disparities, regional clustering, and disease burden patterns.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis\nIncidence (per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Scaled by incidence of tuberculosis across continents"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"", margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains multivariate country-level development indicators grouped by Continent. The central epidemiological and socioeconomic dynamic is captured by the Preston curve: the relationship between GDP per capita and Life Expectancy. Given the right-skewed distribution of GDP per capita, a logarithmic transformation is statistically appropriate. Sizing points by Tuberculosis incidence and coloring by Continent provides a clear multi-dimensional representation of how economic prosperity relates to health outcomes and disease burden globally.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", default.strings = character(0))), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Size scaled to Incidence of Tuberculosis"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  )";FALSE;"Syntax Error";1
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate country-level socioeconomic, health, and environmental indicators across six continents. A classic and highly informative analytical visualization for this type of data is the Preston curve relationship: Life Expectancy versus GDP per capita (log-scaled due to right-skewness), stratified by Continent using color, with point size representing a critical public health indicator (Incidence of Tuberculosis). Adding a smoothed trendline captures the non-linear relationship between national wealth and health outcomes.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), 
+             alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", 
+              linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size indicates tuberculosis incidence rate"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11)
+  )";FALSE;"Under-specification Output";4
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate cross-national indicators across 174 countries categorized by continent. The relationship between national income (`GDP.per.capita`) and health outcomes (`Life.expectancy`) is the foundational Preston curve in development economics. Using a scatter plot with a logarithmic x-axis reveals this non-linear association clearly, while mapping `Continent` to color highlights regional clustering and mapping `Incidence.of.tuberculosis` to point size integrates infectious disease burden without overcomplicating the visual encoding.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  geom_smooth(method = ""loess"", color = ""darkgray"", se = FALSE, linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis\nIncidence (per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Relationship across continents weighted by tuberculosis incidence"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  )";FALSE;"Under-specification Output";4
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. The relationship between national wealth (GDP per capita) and health outcomes (Life expectancy) is a fundamental socioeconomic relationship (the Preston curve). Using a scatter plot with a log10 scale for GDP per capita, colored by Continent and sized by Incidence of Tuberculosis (a major infectious disease marker), captures multiple key dimensions simultaneously. Adding smoothed trendlines per continent highlights regional disparities and non-linear associations.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, 
+           y = Life.expectancy, 
+           color = Continent, 
+           size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""gray30"", linetype = ""dashed"", inherit.aes = FALSE, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), labels = label_comma()) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size corresponds to Incidence of Tuberculosis per 100,000 people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis\nIncidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"", margin = margin(b = 10))
+  )";FALSE;"Syntax Error";2
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents country-level socioeconomic, health, and environmental indicators across six continents. To capture the multivariate relationships, particularly the well-established Preston curve relationship between wealth and health outcomes, a scatter/bubble plot is optimal. Mapping GDP per capita (log-transformed to normalize extreme positive skewness) to the x-axis and Life Expectancy to the y-axis, with point color differentiated by Continent and point size reflecting Poverty rate, effectively visualizes primary global developmental disparities. A non-linear LOESS smoothing curve provides a global trend reference.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents poverty rate; colored by continent"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  )";FALSE;"Under-specification Output";5
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across continents. The relationship between economic prosperity (GDP per capita) and health outcomes (Life expectancy) is a fundamental socioeconomic relationship (Preston curve). A scatter/bubble plot with log-scaled GDP per capita, colored by Continent, sized by Tuberculosis incidence, and complemented by a trend line, captures multivariate relationships effectively.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", colClasses = c(Continent = ""factor""))), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", se = TRUE, linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100k people)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. The most fundamental macro-development relationship in this cross-sectional data is the Preston curve: Life Expectancy as a function of economic prosperity (GDP per capita). Given the wide skew of GDP per capita (ranging from ~110 to ~147,000), a logarithmic transformation is statistically necessary. To integrate multiple dimensions without excessive clutter, we map GDP per capita to the x-axis (log scale), Life Expectancy to the y-axis, Continent to color (stratification), and Poverty rate to point size, accompanied by continent-level smoothed conditional mean curves (LOESS/GAM) to visualize structural differences across world regions.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(aes(color = Continent), method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 8), breaks = c(20, 40, 60, 80)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents Poverty headcount ratio (%)"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"", margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-national development and health indicators. A scatter plot representing the Preston Curve (Life expectancy vs. log-transformed GDP per capita) is the gold standard for visualizing such data, mapping economic prosperity to health outcomes, while using color for Continent and point size for Incidence of Tuberculosis to uncover multivariate geographic patterns.";95;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents tuberculosis incidence per 100k people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""TB Incidence"",
+    color = ""Continent""
+  ) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";5
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-national socioeconomic and health indicators across six continents. A classic, highly informative representation of such global development data is a multivariate bubble plot relating economic output (GDP per capita, log-transformed due to strong right-skewness) to public health (Life expectancy). Mapping Continent to color highlights regional disparities, while mapping Incidence of tuberculosis to point size introduces epidemiological burden into the multivariate relationship.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::comma) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size corresponds to Incidence of Tuberculosis per 100k people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Tuberculosis Incidence"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 15),
+    plot.subtitle = element_text(color = ""grey40"")
+  )";FALSE;"Perfect Execution";5
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset is a cross-national development dataset with 174 countries across 6 continents. The primary relationship of interest in macroeconomic and demographic data is the Preston curve (Life expectancy vs. GDP per capita). GDP per capita spans several orders of magnitude, justifying a logarithmic scale. Adding Continent as color and Poverty rate as point size contextualizes global health outcomes across socio-economic and regional dimensions, while a smoothed trend line highlights the non-linear relationship.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", linetype = ""dashed"", se = FALSE) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  )";FALSE;"Under-specification Output";4
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, environmental, and health indicators across 6 continents. A classic Preston curve (Life expectancy vs. GDP per capita on a log10 scale) enriched with Continent (color) and Poverty rate (size), combined with a non-parametric loess smoother, captures the primary non-linear macroeconomic-health gradient while maintaining high interpretability across multiple dimensions without overwhelming the visual bandwidth.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""grey30"", se = TRUE, linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""Poverty Rate (%)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Cross-national comparison scaled by poverty rate across continents"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  )";FALSE;"Under-specification Output";4
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, health, and environmental indicators across multiple continents. A bubble chart mapping GDP per capita (log-transformed to handle positive skewness) against Life Expectancy, with point size representing Tuberculosis incidence and color delineating Continents, effectively visualizes the multidimensional relationships and disparities between economic prosperity, disease burden, and longevity across global regions.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = FALSE, color = ""gray30"", linetype = ""dashed"") +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), guide = guide_legend(override.aes = list(alpha = 0.8))) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis per 100k; dashed line shows loess trend"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray40"", size = 10),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents country-level socio-economic and public health metrics across six continents. The primary structural relationship in such macroeconomic and demographic data is the Preston curve (Life expectancy versus GDP per capita). GDP per capita exhibits strong right skewness requiring a log10 transformation. Mapping Continent to color reveals regional disparities, while mapping Incidence of tuberculosis to bubble size incorporates a crucial epidemiological dimension. A LOESS smoothing line provides an empirical non-linear expectation of life expectancy given economic output.";100;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis\nIncidence (per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Size scaled by incidence of tuberculosis"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains national-level indicators across multiple continents. A classic macroeconomic and epidemiological relationship is the Preston curve, evaluating Life Expectancy against GDP per capita (log-scaled due to right-skewness). We encode Continent via color to capture regional variations, size by Tuberculosis incidence to show health burden, and overlay smooth trendlines to reveal non-linear socio-economic patterns.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Point size represents Incidence of Tuberculosis (per 100k people)"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""TB Incidence"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10)
+  )";FALSE;"Under-specification Output";5
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains socioeconomic and health indicators across 174 countries categorized into 6 continents. A prominent analytical focus for such cross-national development data is the relationship between economic prosperity (GDP.per.capita) and health outcomes (Life.expectancy). A scatter plot with GDP per capita on a log10 scale, Life expectancy on the y-axis, colored by Continent, sized by Tuberculosis incidence, and overlaid with a generalized additive/smoothed trend line captures multi-dimensional interactions effectively without clutter.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c(""GDP.per.capita"", ""Life.expectancy"", ""Continent"", ""Incidence.of.tuberculosis""))), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; colored by Continent"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence\n(per 100k)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""gray30"", margin = margin(b = 10)),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, health, and environmental indicators across 6 continents. A classic and highly informative analytical representation of this data is the Preston curve: modeling the non-linear relationship between economic output (GDP.per.capita, log-scaled) and population health (Life.expectancy), while stratifying by geographic region (Continent) and encoding disease burden (Incidence.of.tuberculosis) through point sizing. A smooth loess curve highlights the macro-level trend.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(data.frame(
+  GDP.per.capita,
+  Life.expectancy,
+  Continent,
+  Incidence.of.tuberculosis
+)), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""Tuberculosis Incidence\n(per 100k people)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents tuberculosis incidence; dashed line indicates LOESS trend"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10, margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health indicators across multiple continents. A key relationship in global health economics is the Preston curve (GDP per capita versus Life Expectancy). Given the right-skewness of GDP per capita, a logarithmic transformation is appropriate. Using a scatter plot with a non-linear smoothed trend line (LOESS), encoding Continent via color and a secondary health burden (Incidence of Tuberculosis) via point size effectively captures multi-dimensional relationships without overwhelming visual complexity.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = subset(df, !is.na(Continent) & !is.na(GDP.per.capita) & !is.na(Life.expectancy)), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""grey30"", se = TRUE, linewidth = 0.8) +
+  scale_x_continuous(trans = ""log10"", labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), breaks = c(50, 150, 300, 500)) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents tuberculosis incidence per 100,000 population"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis\nIncidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 10, margin = margin(b = 10)),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. The most prominent relationship in development economics is the Preston curve (GDP per capita vs. Life expectancy). Using a log-transformed scale for GDP per capita, coloring by continent, sizing points by Tuberculosis incidence, and overlaying smoothed trend lines provides an effective multivariate view of health outcomes, economic capacity, and regional disparities without cluttering.";95;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, 
+           y = Life.expectancy, 
+           color = Continent, 
+           size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", inherit.aes = FALSE, aes(x = GDP.per.capita, y = Life.expectancy), show.legend = FALSE) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence\n(per 100k)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Syntax Error";2
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, demographic, and health indicators across 6 continents. A classic and highly informative representation for such global development data is the relationship between economic output (GDP per capita, log-transformed due to skewness) and health outcomes (Life expectancy), stratified by Continent and modulated by disease burden (Incidence of tuberculosis) as point size. This multivariate scatter plot effectively captures macro-level health-wealth gradients, regional clustering, and public health disparities in a single coherent visualization.";95;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""gray30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 15),
+    plot.subtitle = element_text(color = ""gray40"", size = 11)
+  ) +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis\nIncidence\n(per 100k)"",
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Point size represents the incidence of tuberculosis""
+  )";FALSE;"Under-specification Output";5
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains national-level indicators across multiple continents. A classic macroeconomic relationship is the Preston curve, relating GDP per capita (heavily right-skewed, requiring a logarithmic transformation) to Life Expectancy. Mapping Continent to color highlights regional disparities, while mapping Poverty rate to point size captures socioeconomic deprivation. Adding a LOESS smooth curve reveals the non-linear diminishing returns of income on population health.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", color = ""grey30"", se = TRUE, linetype = ""dashed"", show.legend = FALSE) +
+  scale_x_log10(labels = scales::comma) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  labs(
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty Rate (%)"",
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Poverty Rate; dashed curve indicates global LOESS fit""
+  ) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate country-level socioeconomic and health metrics across continents. A scatter plot depicting the relationship between GDP per capita (log-transformed due to positive skewness) and Life Expectancy, colored by Continent and sized by Incidence of Tuberculosis, effectively visualizes health outcomes against economic development while showing geographic disparities.";95;"library(ggplot2)
+
+ggplot(data = na.omit(read.csv(text = """", default.strings = c(""NA"", """"))), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format(accuracy = 1)) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; colored by Continent"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence\n(per 100k)""
+  )";FALSE;"Syntax Error";1
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health indicators across six continents. The relationship between national income (GDP per capita) and health outcomes (Life expectancy) is a canonical non-linear relationship (the Preston curve). Log-transforming GDP per capita linearizes this relationship, while mapping Continent to color reveals regional clustering and disparities. Mapping Poverty to point size introduces a third critical dimension of socio-economic vulnerability without cluttering the visualization.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Poverty)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10() +
+  scale_size_continuous(range = c(2, 9)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Points sized by Poverty rate and colored by Continent"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(size = 11, color = ""gray30""),
+    legend.position = ""right""
+  )";FALSE;"Under-specification Output";4
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. The primary relationship of interest in such macroeconomic and public health datasets is the Preston curve: Life Expectancy versus GDP per Capita. Using a log-transformed scale for GDP per capita normalizes the right-skewed distribution and linearizes the relationship. Mapping Continent to color highlights regional disparities, while mapping Incidence of Tuberculosis (or Poverty) to point size incorporates a critical epidemiological dimension without overcrowding.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8, show.legend = FALSE) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents the incidence of tuberculosis per 100k people"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis Incidence""
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";4
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-national development indicators. A classic and statistically sound way to visualize multivariate relationships among such socioeconomic and health metrics is a Preston curve (Life Expectancy vs. GDP per Capita on a log scale), encoding Continent as color to capture macro-regional clustering, and Tuberculosis Incidence as point size to incorporate epidemiological burden.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.75) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = FALSE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; dashed line shows global LOESS trend"",
+    x = ""GDP per Capita (log10 scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Tuberculosis\nIncidence"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";4
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized into 6 continents. A classic macroeconomic-demographic relationship is best captured by visualizing Life Expectancy versus GDP per capita, stratified by Continent and sized by disease burden (Incidence of tuberculosis). A logarithmic scale on GDP per capita linearizes the classic Preston curve relationship, revealing regional disparities and health outcomes effectively.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df[, c(""GDP.per.capita"", ""Life.expectancy"", ""Continent"", ""Incidence.of.tuberculosis"")]), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent, size = Incidence.of.tuberculosis)) +
+  geom_point(alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8, inherit.aes = FALSE, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis; curve shows overall LOESS trend"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis\nIncidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, health, and environmental metrics grouped by continent. A classic and highly informative representation for such cross-national development data is an augmented Preston curve: a bubble scatter plot displaying the relationship between economic prosperity (GDP per capita, log-transformed due to skewness) and health outcomes (Life expectancy), with points colored by Continent to identify regional disparities and sized by Poverty rate or Tuberculosis incidence to incorporate a multidimensional health/poverty metric. A smoothed trendline highlights the global non-linear association.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Poverty headcount ratio (%)"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  )";FALSE;"Under-specification Output";4
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains global development indicators across 174 countries categorized by Continent. A classic and statistically sound way to visualize this multivariate data is the Preston curve: examining the relationship between economic prosperity (GDP per capita, log-transformed due to strong positive skewness) and health outcomes (Life expectancy). We map Continent to color to show regional disparities, and Incidence of Tuberculosis to point size to highlight infectious disease burden within the same epidemiological landscape, complemented by a smoothed trend line to capture non-linear returns on health.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(read.table(text = """", col.names = c(""GDP.per.capita"", ""Life.expectancy"", ""Continent"", ""Incidence.of.tuberculosis""))), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""grey30"", se = TRUE, linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents incidence of tuberculosis; curve shows overall LOESS trend"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics categorized across continents. The relationship between national economic output (GDP per capita) and health outcomes (Life expectancy) represents the foundational Preston curve. A scatter plot on a logarithmic scale for GDP per capita, enriched with point sizing by disease burden (Incidence of tuberculosis) and colored by Continent, effectively captures the multi-dimensional structure of the data without over-complication.";95;"library(ggplot2)
+
+ggplot(data, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(aes(group = 1), method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents tuberculosis incidence per 100k; dashed line shows global LOESS trend"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""TB Incidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 10),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains macro-development indicators across 174 countries categorized by continent. The relationship between national income (GDP per capita) and health outcomes (Life expectancy) is the foundational Preston curve in development economics. Using a log-transformed scale for GDP per capita handles the right-skewness of income, while mapping Continent to color reveals regional health disparities and sizing points by Poverty introduces an additional socio-economic dimension without overcrowding.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 7)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    panel.grid.minor = element_blank(),
+    legend.position = ""right""
+  )";FALSE;"Under-specification Output";5
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic and health indicators across six continents. A classic macroeconomic and demographic representation is the Preston curve, relating GDP per capita (log-transformed due to strong positive skewness across multiple orders of magnitude) to Life Expectancy. Mapping Continent to color highlights geographical disparities, while mapping Poverty to point size adds a third critical socioeconomic dimension, providing a rich multivariate perspective without clutter.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Poverty rate (%); trend line fitted via LOESS"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"")
+  )";FALSE;"Under-specification Output";5
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics categorized by continent. The Preston curve (Life expectancy versus GDP per capita) is the foundational relationship in macroeconomic health data. Using a scatter/bubble plot with log-transformed GDP per capita addresses its right-skewness, while sizing points by Poverty rate and coloring by Continent captures multidimensional disparities across geographic regions. A smoothed trendline highlights the non-linear relationship between wealth and longevity.";95;"library(ggplot2)
+library(scales)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", color = ""black"", se = TRUE, linetype = ""dashed"", size = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita by Continent"",
+    subtitle = ""Point size represents Poverty percentage"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  )";FALSE;"Under-specification Output";4
+1;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, environmental, and health indicators across six continents. A central relationship in development economics is the Preston curve, linking economic output (GDP per capita) to health outcomes (Life expectancy). Because GDP per capita spans several orders of magnitude, a logarithmic scale is appropriate. Sizing points by poverty rate and coloring them by continent reveals multi-dimensional disparities across regions. Adding LOESS smoothed trends within continent facets allows for clear comparison of regional developmental trajectories without visual clutter.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df), aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linewidth = 0.7) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(1.5, 6)) +
+  scale_color_brewer(palette = ""Set1"") +
+  facet_wrap(~ Continent) +
+  theme_minimal() +
+  theme(
+    legend.position = ""bottom"",
+    strip.text = element_text(face = ""bold"", size = 11),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Poverty (%)"",
+    color = ""Continent""
+  )";FALSE;"Perfect Execution";5
+2;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and public health metrics across six continents. A classic and effective representation for this multidimensional macroeconomic data is a bubble scatter plot examining the relationship between economic prosperity (GDP per capita) and health outcomes (Life expectancy), with point size encoding poverty rates and color encoding continent, combined with continent-level faceting and a trend line to explore both global and regional patterns without visual clutter.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linewidth = 0.8) +
+  scale_x_log10(labels = label_dollar()) +
+  scale_size_continuous(range = c(2, 8)) +
+  scale_color_brewer(palette = ""Set1"") +
+  facet_wrap(~ Continent) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita Across Continents"",
+    subtitle = ""Point size represents Poverty headcount ratio (%)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Poverty (%)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""bottom"",
+    strip.text = element_text(face = ""bold""),
+    plot.title = element_text(face = ""bold"", size = 14),
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+3;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, environmental, and health indicators across six continents. A prominent multivariate relationship in development economics is the Preston curve (the relationship between economic output and life expectancy). Because GDP per capita spans several orders of magnitude (110 to ~148,000), a log-10 scale is appropriate. Faceting by Continent controls for regional heterogeneity, while mapping Poverty to a continuous color gradient and Incidence of Tuberculosis to point size allows simultaneous exploration of five key dimensions (GDP, Life Expectancy, Poverty, Disease Burden, and Continent) without visual clutter.";95;"library(ggplot2)
+
+ggplot(data, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Poverty, size = Incidence.of.tuberculosis), alpha = 0.75) +
+  geom_smooth(method = ""loess"", se = FALSE, color = ""grey30"", linewidth = 0.6) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_color_viridis_c(option = ""magma"", direction = -1) +
+  scale_size_continuous(range = c(1.5, 7)) +
+  facet_wrap(~ Continent, scales = ""free_x"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    strip.background = element_rect(fill = ""grey92"", color = NA),
+    strip.text = element_text(face = ""bold""),
+    legend.position = ""bottom"",
+    legend.box = ""horizontal"",
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = ""Socio-Economic Development and Health Disparities by Continent"",
+    x = ""GDP per Capita (USD, log10 scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Poverty Rate (%)"",
+    size = ""Tuberculosis Incidence\n(per 100k)""
+  )";FALSE;"Under-specification Output";5
+4;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic and health indicators across multiple continents. A classic and highly informative representation for such macroeconomic development data (Preston curve / Gapminder-style) is a multivariate bubble plot. Mapping log-transformed GDP per capita to the x-axis and Life expectancy to the y-axis captures the primary non-linear economic-health relationship, while Continent (categorical) as color reveals regional clustering, and Poverty (continuous) as point size introduces a third critical dimension without visual clutter. A global LOESS smoother provides the overall empirical trendline.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(aes(weight = NULL), method = ""loess"", color = ""grey40"", se = FALSE, linetype = ""dashed"") +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (Years)"",
+    size = ""Poverty Rate (%)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";4
+5;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socioeconomic, health, and environmental indicators across multiple continents. A key relationship in development economics (the Preston curve) relates GDP per capita to life expectancy, modulated by continent, poverty rate, and health outcomes. A bubble chart mapping GDP per capita (log-scaled) to life expectancy, colored by continent and sized by poverty rate, alongside a smoothed trendline effectively reveals multivariate clustering, regional disparities, and non-linear developmental patterns.";95;"library(ggplot2)
+library(scales)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""grey30"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 15),
+    plot.subtitle = element_text(color = ""grey40"")
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Poverty headcount ratio; stratified by Continent"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  )";FALSE;"Under-specification Output";5
+6;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains cross-national socio-economic, health, and demographic indicators across 6 continents. To understand the primary relationships among key welfare measures—specifically the classic Preston curve relating wealth (GDP per capita) and health outcomes (Life expectancy)—a scatter plot with a log-transformed economic scale is optimal. Adding Continent as color/facets and another health burden (Incidence of tuberculosis) as size allows effective multivariate comparison while controlling for regional variation.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(1.5, 8)) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    size = ""Tuberculosis Incidence\n(per 100k)"",
+    color = ""Continent""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", hjust = 0.5)
+  )";FALSE;"Under-specification Output";4
+7;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains multivariate cross-sectional country-level socio-economic development metrics across six continents. A classic and effective representation is the Preston curve: plotting Life Expectancy against GDP per Capita (log-transformed to account for the diminishing returns of income on longevity), colored by Continent to reveal regional clusters/disparities, and sized by Poverty rate (or Tuberculosis incidence) to integrate a third socio-economic dimension cleanly.";95;"library(ggplot2)
+
+ggplot(data = na.omit(df[, c(""GDP.per.capita"", ""Life.expectancy"", ""Continent"", ""Poverty"")]), 
+       aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = TRUE, color = ""black"", linetype = ""dashed"", linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9)) +
+  scale_color_brewer(palette = ""Set1"") +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11)
+  ) +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Poverty rate (%); trend estimated via LOESS"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  )";FALSE;"Under-specification Output";4
+8;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains country-level socio-economic, environmental, and demographic metrics across six continents. A primary epidemiological and macroeconomic relationship is the Preston curve (GDP per capita vs. Life Expectancy). Visualizing this relationship using a scatter plot with a logarithmic scale for GDP per capita handles the right-skewness of economic output. Incorporating Continent via color displays macro-geographic disparities, while mapping point size to Poverty (or Tuberculosis incidence) adds a third continuous dimension without clutter. A smoothed LOESS curve provides an empirical non-parametric trend line.";95;"library(ggplot2)
+
+ggplot(df, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_smooth(method = ""loess"", formula = y ~ x, color = ""grey40"", fill = ""grey80"", se = TRUE) +
+  geom_point(aes(color = Continent, size = Poverty), alpha = 0.7) +
+  scale_x_log10(labels = scales::label_dollar()) +
+  scale_size_continuous(range = c(2, 8)) +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Poverty rate (%) across Continents"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Poverty (%)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey30"", size = 11),
+    legend.position = ""right"",
+    panel.grid.minor = element_blank()
+  )";FALSE;"Under-specification Output";5
+9;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset contains multi-dimensional macroeconomic, demographic, and public health indicators across countries grouped by continents. A classic Preston-curve style scatter plot analyzing the relationship between economic output (GDP per capita, log-transformed due to skewness) and health outcomes (Life expectancy), stratified by Continent and scaled by disease burden (Incidence of tuberculosis), captures the key socio-economic relationships and geographic clustering efficiently.";95;"library(ggplot2)
+
+ggplot(data = subset(df, !is.na(Continent) & Continent != """"), 
+       aes(x = GDP.per.capita, y = Life.expectancy, color = Continent)) +
+  geom_point(aes(size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", se = FALSE, linewidth = 0.8) +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 9), name = ""TB Incidence\n(per 100k)"") +
+  scale_color_brewer(palette = ""Set1"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita across Continents"",
+    subtitle = ""Point size represents Incidence of Tuberculosis"",
+    x = ""GDP per Capita (USD, Log Scale)"",
+    y = ""Life Expectancy (Years)""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11)
+  )";FALSE;"Under-specification Output";5
+10;"Data Visualization";"geom_histogram, ggpairs, geom_boxplot, geom_bar";"The dataset presents multivariate global development indicators across 6 continents. A bubble chart inspired by classic development economics (e.g., Preston curve / Gapminder) effectively visualizes key multidimensional relationships: GDP per capita (log-transformed due to skewness spanning three orders of magnitude) versus Life expectancy, with color distinguishing continents and point size encoding the incidence of tuberculosis (a major public health burden indicator). An overall smoothed trend highlights the nonlinear macroeconomic relationship.";95;"library(ggplot2)
+
+ggplot(data, aes(x = GDP.per.capita, y = Life.expectancy)) +
+  geom_point(aes(color = Continent, size = Incidence.of.tuberculosis), alpha = 0.7) +
+  geom_smooth(method = ""loess"", formula = y ~ x, color = ""grey30"", se = FALSE, linewidth = 0.8, linetype = ""dashed"") +
+  scale_x_log10(labels = scales::dollar_format()) +
+  scale_size_continuous(range = c(2, 10)) +
+  scale_color_brewer(palette = ""Set2"") +
+  labs(
+    title = ""Life Expectancy vs. GDP per Capita"",
+    subtitle = ""Point size represents Incidence of Tuberculosis (per 100,000 people)"",
+    x = ""GDP per Capita (USD, log scale)"",
+    y = ""Life Expectancy (years)"",
+    color = ""Continent"",
+    size = ""Tuberculosis\nIncidence""
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = ""right"",
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = ""bold"", size = 14),
+    plot.subtitle = element_text(color = ""grey40"", size = 11)
+  )";FALSE;"Under-specification Output";4

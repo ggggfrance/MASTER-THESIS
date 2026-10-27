@@ -1,0 +1,1712 @@
+"Iteration_ID";"Task";"Target_Methodology";"Chain_of_Thought";"Confidence_Score";"Model_Code_Snippet";"Pass_Rate_Strict";"Error_Category";"LLM_Judge_Score"
+1;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the standard metric representing overall quality of life. For predictors, GDP per capita demonstrates a well-established non-linear (diminishing returns) relationship with life expectancy (the Preston curve), making a logarithmic transformation statistically essential to linearize the relationship and stabilize variance. Similarly, incidence of tuberculosis is heavily right-skewed and benefits from a log transformation. Life expectancy itself is generally maintained in its natural scale for direct interpretability in years, as its distribution in cross-country data does not span multiple orders of magnitude. A binary dummy variable for high poverty and a multi-level categorical variable for continent are created/ensured.";95;"library(dplyr)
+
+real_dataset_prepared <- real_dataset %>%
+  mutate(
+    # Dependent variable is Life.expectancy (kept in original scale for interpretability)
+    # Log transformations for heavily right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary indicator)
+    High_Poverty = if_else(Poverty >= median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+2;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it directly quantifies population health and general quality of life. For the independent variables, GDP per capita exhibits strong positive skewness and diminishing returns with respect to life expectancy (the Preston curve), making a log transformation necessary for linear modeling. Incidence of tuberculosis is also heavily right-skewed and benefits from a log transformation. 'Continent' serves as the multi-class categorical variable (converted to a factor), and a dummy variable 'high_poverty' is generated (1 if Poverty exceeds a common threshold, e.g., 30%, otherwise 0) to capture structural deprivation while meeting the dummy requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (standard for life expectancy in years)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for right-skewed economic and epidemiological covariates
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable requirement
+    Continent = as.factor(Continent),
+    
+    # Dummy variable requirement (binary 0/1)
+    high_poverty = if_else(Poverty > 30, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+3;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the premier metric representing population health and overall quality of life, making it the most suitable dependent variable. It is kept on its natural scale to preserve direct interpretability in years. In contrast, economic theory (the Preston Curve) demonstrates a diminishing marginal return of income on life expectancy, necessitating a log transformation of GDP per capita. Similarly, disease incidence (tuberculosis) typically exhibits strong right-skewness and benefits from logarithmic transformation. Continent provides a natural multi-class categorical variable, while an indicator for high rural population (e.g., Rural.population >= 50%) creates an interpretable binary dummy variable representing rural-dominant countries.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Dependent variable: Life.expectancy (kept linear)
+  # Log transformations for heavily skewed predictors
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis)
+  ) %>%
+  # Ensure categorical variable
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create a binary dummy variable (1 = Predominantly Rural, 0 = Predominantly Urban)
+  mutate(
+    is_rural = if_else(Rural.population >= 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+4;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, `Life.expectancy` is the most reliable, comprehensive, and standard dependent variable. In demographic and economic literature (e.g., the Preston curve), life expectancy is best modeled against the logarithm of `GDP.per.capita` to capture diminishing marginal returns and handle heavy right-skewness. `Life.expectancy` is kept on its natural scale to preserve direct interpretability in years. We keep `Continent` as an explicit categorical factor and create a binary dummy variable (`Rural_majority`) indicating whether more than 50% of the population resides in rural areas.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformation for right-skewed economic predictor
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if rural population > 50%, 0 otherwise)
+    Rural_majority = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+5;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it directly represents population health and quality of life. The Preston curve demonstrates a logarithmic relationship between GDP per capita and life expectancy, meaning GDP per capita requires a log transformation to linearize its diminishing returns. The dependent variable (Life expectancy) is typically left in linear terms for intuitive interpretation in years, though log(GDP per capita) addresses the heavy right skewness. For categorical requirements, 'Continent' is retained as a multi-class factor, and a dummy variable ('High_Poverty') is constructed to capture structural poverty effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Transformation of heavily skewed economic variables
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Create a binary dummy variable (1 if poverty exceeds median, 0 otherwise)
+  mutate(
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  ) %>%
+  # Ensure the multi-class categorical variable is properly factored
+  mutate(
+    Continent = as.factor(Continent)
+  )";FALSE;"Perfect Execution";5
+6;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable since it is the canonical metric for overall quality of life and population health. In linear regression, Life Expectancy is typically retained on its original scale (years) to maintain direct, intuitive interpretability, whereas GDP per capita is log-transformed due to strong right-skewness and the Preston curve (diminishing marginal returns of economic output on health). Continent serves as the categorical variable (converted to a factor), and a dummy indicator (High_Poverty) is constructed based on poverty rates to satisfy the structural model requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform right-skewed economic predictor (Preston Curve relationship)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 = High Poverty above sample median, 0 = otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+7;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, 'Life.expectancy' is the most direct and standard proxy for overall societal well-being and health outcomes, serving as the dependent variable. In line with the empirical Preston Curve relationship, life expectancy exhibits diminishing marginal returns with economic growth, making a log transformation for 'GDP.per.capita' appropriate to linearize the association and mitigate right-skewness. Highly skewed disease burden rates like 'Incidence.of.tuberculosis' also benefit from a log transformation. 'Continent' serves as the categorical variable (converted to a factor), and an indicator for high poverty (e.g., poverty rate > 30%) or high rural population is introduced as a binary dummy variable.";95;"library(dplyr)
+
+real_dataset_prepared &lt;- real_dataset %&gt;%
+  mutate(
+    # Ensure categorical variable is properly encoded as a factor
+    Continent = as.factor(Continent),
+    
+    # Create a binary dummy variable (1 if Poverty rate is above 30%, 0 otherwise)
+    High_Poverty = if_else(Poverty &gt; 30, 1L, 0L),
+    
+    # Log-transform highly skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1)
+  )";FALSE;"Perfect Execution";5
+8;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most recognized, standardized proxy for quality of life and population well-being. It is kept on its natural scale (years) because its distribution is generally bounded and linear interpretations (years of life gained) are standard in demographic literature. 
+
+In contrast, GDP per capita displays a strongly non-linear, concave relationship with life expectancy (the Preston curve), necessitating a logarithmic transformation to capture diminishing marginal returns. Incidence of tuberculosis is right-skewed across countries and is also log-transformed (with +1 for zero-handling). Continent is converted to a nominal factor (categorical variable), and a binary dummy variable (e.g., High_Poverty, based on the median poverty rate) is explicitly created to satisfy regression modeling requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable is Life.expectancy (retained in levels for standard Preston curve interpretation)
+    
+    # Scale transformation for highly skewed / diminishing return predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+9;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the canonical metric for quality of life analysis. GDP per capita exhibits a well-documented non-linear (logarithmic) relationship with life expectancy (the Preston curve) and extreme positive skewness, making log(GDP.per.capita) essential. Life expectancy itself is generally normally distributed across countries and interpretable in years, so it is kept in linear scale. Continent serves as the categorical variable (converted to a factor), and an indicator (dummy) variable is constructed to capture high poverty levels based on threshold/median criteria.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  # Target variable: Life.expectancy (linear scale for direct interpretability in years)
+  # Independent variable log-transformation to linearize the Preston curve relationship
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Categorical variable: Continent
+  mutate(Continent = as.factor(Continent)) %>%
+  # Dummy variable: High poverty indicator (1 if above median, 0 otherwise)
+  mutate(dummy_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L))";FALSE;"Perfect Execution";5
+10;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, Life.expectancy is the most appropriate dependent variable as it directly reflects overall population health and living conditions. According to the Preston Curve, the relationship between GDP per capita and life expectancy is logarithmic rather than linear; thus, GDP.per.capita is log-transformed, while Life.expectancy is preserved in its original scale (years) for direct interpretability. Incidence of tuberculosis is right-skewed and also log-transformed. Continent serves as the categorical variable (factored), and a binary dummy variable (e.g., high_poverty) is created to capture threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary: 1 if Poverty exceeds threshold/median, 0 otherwise)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0),
+    
+    # Log transformations for heavily right-skewed predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis)
+  )";FALSE;"Perfect Execution";5
+11;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it is a universal, standardized proxy for quality of life. In standard health economics (e.g., the Preston curve), GDP per capita exhibits diminishing marginal returns to life expectancy and a heavy right skew, making a natural logarithmic transformation (`log_GDP_per_capita`) statistically appropriate. Life expectancy remains unlogged to maintain natural interpretability in years. 'Continent' is retained as an explicit multi-category factor, and a dummy variable `High_Poverty` is created based on the median poverty rate to satisfy the requirement of having both categorical and dummy predictors.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformation for right-skewed economic and epidemiological variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    Dummy_High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+12;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the standard and most direct quantitative proxy for overall quality of life at the national level. Keeping it in its natural scale (years) facilitates straightforward interpretation of coefficients, as it is moderately bounded and typically does not exhibit extreme power-law skewness.
+2. Log Transformation: `GDP.per.capita` is log-transformed (`log_GDP_per_capita`) to capture the well-established Preston curve (diminishing marginal returns of national income on life expectancy) and to normalize its heavily right-skewed distribution.
+3. Categorical & Dummy Variables: `Continent` is preserved and cast as a multi-category factor to capture regional fixed effects. A binary dummy variable, `High_Poverty`, is derived (e.g., poverty rate > 30% or median threshold) to satisfy the requirement for at least one explicit dummy indicator.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform right-skewed economic predictor (Preston curve)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Ensure categorical variable is properly typed as a factor
+    Continent = as.factor(Continent),
+    
+    # Create a binary dummy variable (1 if Poverty > 30%, 0 otherwise)
+    High_Poverty = if_else(Poverty > 30, 1L, 0L)
+  ) %>%
+  # Select and arrange relevant variables for linear regression modeling
+  select(
+    Life.expectancy,       # Dependent variable
+    log_GDP_per_capita,    # Log-transformed independent variable
+    Continent,             # Categorical variable (>2 levels)
+    High_Poverty,          # Binary dummy variable
+    everything()
+  )";FALSE;"Perfect Execution";5
+13;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the premier metric for quantifying overall quality of life. The Preston curve demonstrates a well-established logarithmic relationship between economic output and life expectancy, making a log transformation of 'GDP.per.capita' theoretically and empirically essential to linearize the relationship. Tuberculosis incidence is typically heavily right-skewed across global cohorts, justifying a logarithmic transformation (log1p). 'Continent' serves as the multi-class categorical predictor, while a binary dummy variable indicating high poverty (relative to the median) satisfies the requirement for a dummy regressor.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (linear with log GDP)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformations for heavily skewed monetary and epidemiological indicators
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (e.g., above median poverty)
+    High_Poverty_Dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+14;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most direct and universally recognized measure of quality of life in macroeconomic and health data, making it the ideal dependent variable. Because the relationship between GDP per capita and life expectancy follows the Preston curve (diminishing marginal returns), log-transforming 'GDP.per.capita' linearizes the relationship and corrects right-skewness without needing to transform life expectancy, which is already continuous and bounded. 'Continent' serves as the multi-class categorical variable (factored), and a dummy/binary variable ('High_Poverty' or a specific continent/access indicator) is created to capture threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Log-transform right-skewed independent variables, notably GDP per capita
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis)
+  ) %>%
+  # Ensure categorical variable is properly factored
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create a dummy variable (e.g., high rural population or high poverty threshold)
+  mutate(
+    High_Poverty_Dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  ) %>%
+  # Select and clean relevant columns for the regression model
+  select(
+    Life.expectancy,          # Dependent variable
+    log_GDP_per_capita,       # Log-transformed independent variable
+    log_Tuberculosis,         # Log-transformed independent variable
+    High_Poverty_Dummy,       # Dummy variable (binary)
+    Continent,                # Multi-level categorical variable
+    Unemployment,
+    Access.to.electricity,
+    PM2.5.air.pollution
+  )";FALSE;"Perfect Execution";5
+15;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable because it serves as the standard, robust metric for overall quality of life in public health and economic development studies. For independent variables, GDP per capita demonstrates strongly diminishing marginal returns with respect to life expectancy (the well-documented Preston Curve); thus, a logarithmic transformation of GDP per capita linearizes this relationship and stabilizes variance. Life expectancy is kept in its natural scale to preserve direct interpretability and linear association with log(GDP). 'Continent' provides the required multi-level categorical variable, and a binary dummy variable ('high_poverty') is constructed to capture structural vulnerability thresholds.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Ensure categorical variable is explicitly factored
+    Continent = as.factor(Continent),
+    
+    # Log-transform right-skewed economic predictor (diminishing marginal returns)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Create a binary dummy variable indicating high poverty (above median)
+    high_poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+16;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most universally accepted demographic proxy for quality of life. In cross-national models (the Preston curve), the relationship between economic output and life expectancy is logarithmic; thus, GDP per capita is log-transformed to linearize the relationship and handle right-skewness. Incidence of tuberculosis is also log-transformed to mitigate strong positive skewness. 'Continent' is converted to an explicit factor to serve as the required categorical variable with multiple levels, and a binary dummy variable ('high_poverty') is engineered using a median threshold on poverty to satisfy the requirement of having at least one dummy variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Handle scale transformations
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Ensure categorical variable is explicitly a factor
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create at least one dummy variable (0 or 1)
+  mutate(
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+17;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the quintessential indicator of overall quality of life and population health. In demographic and econometric studies (e.g., the Preston curve), life expectancy is typically retained in its natural scale (years) rather than log-transformed, as its distribution across countries is relatively symmetric and bounded.
+2. Independent Variable Transformations: `GDP.per.capita` is known to have a strong right-skewed distribution and diminishing marginal returns on quality of life; thus, a natural logarithm transformation (`log_GDP_per_capita`) linearizes the Preston curve relationship.
+3. Categorical & Dummy Variables: `Continent` is converted to a nominal factor with multiple categories. A binary dummy variable (`high_poverty`) is created based on the median poverty rate to capture threshold effects of poverty on life expectancy.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable (kept in natural scale)
+    Life_expectancy = Life.expectancy,
+    
+    # Scale transformation for skewed economic predictor (Preston curve)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating high poverty (1 if above median, 0 otherwise)
+    dummy_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+18;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy ('Life.expectancy') is chosen as the dependent variable because it is the quintessential, universally recognized objective metric of human health and overall quality of life. In macro-level demographic regressions, life expectancy is kept in its natural scale (years) to maintain direct interpretability.
+
+For the independent variables:
+1. 'GDP.per.capita' exhibits classic diminishing returns on life expectancy (the Preston curve) and extreme positive skewness; applying a natural logarithmic transformation (`log_GDP_per_capita`) linearizes this relationship.
+2. 'Continent' is retained and explicitly cast as a multi-category factor to satisfy the categorical variable requirement and capture regional baseline differences.
+3. A dummy indicator (`High_Poverty`) is generated based on whether poverty exceeds the median/policy threshold (or alternatively high access to basic infrastructure) to satisfy the binary/dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years) for direct interpretability
+    # Log-transform right-skewed economic predictor (Preston Curve relationship)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable (multi-level factor)
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+19;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most established, robust, and continuous proxy for quality of life in cross-national analyses, making it the ideal dependent variable. To capture the well-documented non-linear Preston curve relationship—where income exhibits diminishing marginal returns on life expectancy—a logarithmic transformation is applied to GDP per capita. Similarly, heavily right-skewed disease counts like incidence of tuberculosis benefit from log-transformation. For model requirements, 'Continent' is retained as an explicit factor (categorical variable), and a binary dummy variable indicating high unemployment (above sample median) is created. Life expectancy is kept in its natural scale to preserve straightforward interpretability in years.";98;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years) for intuitive linear model interpretation
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformations to address skewness and non-linear diminishing returns (e.g., Preston curve)
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_of_tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., high unemployment rate based on median threshold)
+    High_Unemployment_Dummy = if_else(Unemployment > median(Unemployment, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+20;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is selected as the primary dependent variable as it serves as the universally recognized, comprehensive proxy for quality of life. In health economics and development studies (e.g., the Preston curve), GDP per capita exhibits strong positive skewness and diminishing marginal returns to life expectancy, making a logarithmic transformation appropriate. Life expectancy itself typically satisfies normality assumptions without transformation. For the regression specification, Continent is retained as an explicit factor (categorical variable), and a binary dummy variable representing high poverty (relative to median poverty levels) is created.";95;"library(dplyr)
+
+prepared_data <- real_dataset %>%
+  mutate(
+    # Dependent variable
+    Life.expectancy = Life.expectancy,
+    
+    # Scale transformation for skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if Poverty is above the sample median, 0 otherwise)
+    high_poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+21;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, `Life.expectancy` is the standard dependent variable as it comprehensively reflects health, standard of living, and healthcare access. According to the Preston Curve, the relationship between GDP per capita and life expectancy is logarithmic due to diminishing marginal returns, making `log(GDP.per.capita)` a statistically necessary transformation to ensure linearity. `Continent` serves as the multi-class categorical variable (converted to a factor), and a dummy variable (`high_poverty`) is created based on the median poverty rate to capture threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Transformation of heavily skewed economic predictor (Preston curve)
+  mutate(log_GDP_per_capita = log(GDP.per.capita)) %>%
+  # Creation of a dummy variable (binary indicator)
+  mutate(high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)) %>%
+  # Explicitly defining the categorical variable
+  mutate(Continent = as.factor(Continent)) %>%
+  # Select and clean relevant modeling variables
+  select(
+    Life.expectancy,          # Dependent variable
+    log_GDP_per_capita,       # Transformed continuous predictor
+    high_poverty,             # Dummy variable
+    Continent,                # Categorical variable
+    Population.ages,
+    Unemployment,
+    Access.to.electricity,
+    PM2.5.air.pollution,
+    Incidence.of.tuberculosis,
+    Rural.population,
+    Forest.area
+  )";FALSE;"Perfect Execution";5
+22;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy (`Life.expectancy`) is the most widely recognized and robust indicator for quality of life analysis. 
+
+1. Dependent Variable: `Life.expectancy` is kept on its original scale as it typically has a near-normal distribution bounded around biological limits, and linear interpretations (years gained) are directly policy-relevant.
+2. Logarithmic Transformations: `GDP.per.capita` and `Incidence.of.tuberculosis` are highly right-skewed and exhibit diminishing marginal returns on quality of life; applying a natural log transformation linearizes these relationships.
+3. Categorical & Dummy Variables: `Continent` serves as the multi-class categorical variable (converted to a factor). A binary dummy variable, `high_poverty` (or alternatively an electricity/pollution dummy), is created using an indicator function (e.g., poverty rate > median/benchmark) to satisfy the dummy variable requirement.";95;"library(dplyr)
+
+# Data preprocessing for linear regression
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable: Life.expectancy remains linear for intuitive interpretation in years
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformations for heavily right-skewed economic/health metrics
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable: Continent converted to factor
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary indicator): High poverty threshold (e.g., Poverty >= 35%)
+    dummy_high_poverty = if_else(Poverty >= 35, 1, 0)
+  )";FALSE;"Perfect Execution";5
+23;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: 'Life.expectancy' is the quintessential proxy for Quality of Life, as it reflects overall population health, healthcare systems, and living conditions. It remains on its natural scale (years) for direct, intuitive interpretability in linear regression.
+2. Logarithmic Transformations: 'GDP.per.capita' exhibits diminishing marginal returns relative to health outcomes (the Preston curve) and is heavily right-skewed; applying a natural log transformation linearizes this relationship. Similarly, 'Incidence.of.tuberculosis' is heavily right-skewed and benefits from a log transformation.
+3. Categorical & Dummy Variables: 'Continent' is encoded as a multi-class categorical factor. A dummy indicator 'High_Poverty' (1 if above median poverty, 0 otherwise) is created to meet the requirement of having at least one binary/dummy feature.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Ensure categorical variable is properly factored
+    Continent = as.factor(Continent),
+    
+    # Create a dummy variable (1 = high poverty above median, 0 = otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L),
+    
+    # Log transformations to address skewness and non-linear Preston curve effects
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis + 1)
+  )";FALSE;"Perfect Execution";5
+24;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For quality of life analysis, 'Life.expectancy' serves as the ideal dependent variable as it directly reflects baseline population health, healthcare access, and living standards. 
+
+1. Dependent Variable Scaling: Life expectancy is measured on an intuitive scale (years) and is typically well-behaved, so it is kept in levels for straightforward interpretation.
+2. Independent Variable Transformations: 'GDP.per.capita' exhibits severe right-skewness and follows the well-documented Preston curve relationship with life expectancy (diminishing marginal returns); hence, a natural log transformation (`log_GDP`) is applied. 'Incidence.of.tuberculosis' is also right-skewed and benefits from a log transformation.
+3. Categorical & Dummy Variables: 'Continent' is converted to a factor variable representing regions (categorical). A dummy variable (`high_poverty_dummy`) is created indicating whether poverty exceeds a critical threshold (e.g., median or 30%).";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if rural population exceeds 50%, 0 otherwise)
+    rural_dominant_dummy = if_else(Rural.population > 50, 1, 0),
+    
+    # Log transformations for heavily skewed monetary and epidemiological variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis)
+  )";FALSE;"Perfect Execution";5
+25;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For quality of life analysis, 'Life.expectancy' is the most robust and standard dependent variable. Keeping Life.expectancy in its original scale (years) preserves direct interpretability for linear regression coefficients, while applying a natural logarithmic transformation to 'GDP.per.capita' corrects for positive skewness and captures the well-documented non-linear (diminishing marginal returns) Preston curve relationship. A binary dummy variable ('high_unemployment') is generated via a threshold split, and 'Continent' is structured as a categorical factor variable to fulfill model requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform skewed economic predictor (GDP per capita)
+    log_gdp = log(GDP.per.capita),
+    
+    # Categorical variable (factor)
+    continent_factor = as.factor(Continent),
+    
+    # Dummy variable (0/1 indicator for above-median poverty)
+    high_poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+26;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the standard metric used to represent quality of life and serves as the dependent variable. It generally exhibits a direct, linear relationship with health and well-being outcomes. In contrast, GDP per capita displays a well-documented non-linear (Preston curve), heavily right-skewed relationship with life expectancy; taking its natural logarithm linearizes this relationship and stabilizes variance. For categorical representation, 'Continent' is structured as a multi-level factor, while a binary dummy variable (e.g., 'is_predominantly_rural', indicating whether rural population exceeds 50%) is generated to capture structural development differences.";95;"library(dplyr)
+
+processed_data <- real_dataset %>%
+  # Target variable selection and scale adjustments
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    # Categorical variable
+    Continent = as.factor(Continent),
+    # Binary dummy variable (1 if rural population > 50%, 0 otherwise)
+    is_predominantly_rural = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+27;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most standard and encompassing proxy for overall quality of life at the national level. In accordance with the Preston curve, the relationship between GDP per capita and life expectancy is logarithmic due to diminishing marginal returns of wealth on health outcomes; thus, GDP per capita is log-transformed. Life expectancy remains in its natural scale to preserve intuitive interpretability. The 'Continent' variable serves as a multi-class categorical variable (converted to factor) to control for regional heterogeneity, and a binary dummy variable ('High_Poverty') is created using the median poverty rate to capture threshold effects of severe deprivation.";95;"library(dplyr)
+
+# Prepare dataset for linear regression
+prepared_data <- real_dataset %>%
+  mutate(
+    # Dependent variable is Life.expectancy (kept in levels for linear interpretation)
+    # Log-transform highly skewed economic indicators (e.g., GDP per capita)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+28;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it serves as the most widely accepted standard metric for quality of life and human development. In line with the Preston curve, GDP per capita demonstrates diminishing marginal returns on health/longevity, making a natural log transformation statistically essential to linearize its relationship with life expectancy. Similarly, incidence of tuberculosis is right-skewed and benefits from a logarithmic transformation. Life expectancy itself is retained on its natural scale to preserve direct, interpretable coefficients (measured in years). Continent is encoded as a multi-class categorical factor, and a binary dummy variable indicating high poverty (above the median threshold) is constructed to satisfy the categorical and dummy specification requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years of life expectancy)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for right-skewed economic and health indicators
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary: 1 if Poverty is above the median, 0 otherwise)
+    dummy_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+29;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable Selection: `Life.expectancy` is the universally acknowledged primary indicator of overall population health and quality of life.
+2. Transformations: The relationship between GDP per capita and life expectancy is well-established as logarithmic (the Preston curve); thus, `GDP.per.capita` is log-transformed. `Life.expectancy` is kept linear to preserve direct interpretability in years. `Incidence.of.tuberculosis` is right-skewed and benefits from a log transformation (`log1p`).
+3. Categorical & Dummy Variables: `Continent` serves as a polytomous categorical predictor (converted to factor). We create a dummy variable `High_Poverty` (1 if `Poverty` > median or a standard benchmark like 30%, 0 otherwise) or `Rural_Majority` (1 if `Rural.population` > 50, 0 otherwise) to explicitly satisfy the dummy variable requirement.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for skewed predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if rural population exceeds 50%, 0 otherwise)
+    is_rural_majority = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+30;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable Selection: `Life.expectancy` is universally recognized as the primary indicator for overall population health and quality of life. In linear regression, life expectancy is typically maintained in its natural scale to preserve direct interpretability (impact measured in years of life gained or lost).
+2. Log Transformation: `GDP.per.capita` follows the well-documented Preston curve relationship with life expectancy—showing diminishing marginal returns and severe right skewness. Applying a natural logarithm linearizes this relationship and stabilizes variance.
+3. Categorical & Dummy Variables: `Continent` is retained and explicitly cast as a multi-class categorical factor. A binary dummy variable (`high_poverty`) is created using an indicator threshold to satisfy the requirement of having at least one dummy variable alongside the categorical predictor.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale for direct interpretation
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformation for right-skewed economic predictor
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Multi-class categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., high poverty indicator where Poverty > median)
+    dummy_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+31;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most standard, continuous measure of quality of life in demographic and socio-economic literature. For independent variables, GDP per capita demonstrates diminishing marginal returns with respect to life expectancy (the Preston curve), making a logarithmic transformation statistically essential to achieve linearity and stabilize variance. Incidence of tuberculosis is typically heavily right-skewed and also benefits from a log transformation. The variable 'Continent' serves as the multi-class categorical variable (converted to a factor), and an explicit binary dummy variable ('majority_rural') is derived from Rural.population to fulfill the requirement for a dummy variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Transform heavily skewed economic and health covariates
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable (multi-class)
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if majority rural, 0 otherwise)
+    majority_rural = if_else(Rural.population > 50, 1, 0)
+  )";FALSE;"Perfect Execution";5
+32;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most comprehensive and direct proxy for quality of life in macroeconomic health data. For independent variables, GDP per capita and Incidence of tuberculosis are typically heavily right-skewed and exhibit non-linear (diminishing returns) relationships with life expectancy (the Preston curve), making a logarithmic transformation appropriate. Life expectancy can be kept in levels to preserve direct interpretability in years (or modeled in logs; here kept in levels for standard Preston-type semi-elasticity modeling). 'Continent' serves as the multi-class categorical variable (converted to a factor), and a binary dummy variable (e.g., 'High_Poverty' or 'Full_Electricity_Access') is created using dplyr mutate to satisfy the dummy requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Ensure categorical variable is explicitly a factor
+    Continent = as.factor(Continent),
+    
+    # Create a dummy variable (e.g., High_Poverty indicator based on median poverty)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0),
+    
+    # Logarithmic transformation of skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis)
+  )";FALSE;"Perfect Execution";5
+33;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is selected as the dependent variable since it is the standard quantitative benchmark for quality of life across nations. The Preston curve demonstrates a well-established concave (log-linear) relationship between GDP per capita and life expectancy; therefore, applying a natural logarithmic transformation to GDP per capita linearizes the association. Life expectancy remains untransformed to preserve direct interpretability in years. 'Continent' is retained as a multi-class categorical variable, and an indicator dummy variable ('High_Poverty') is constructed to signify elevated poverty levels relative to the sample median.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in levels for direct interpretation in years
+    # Log-transforming GDP per capita to capture diminishing marginal returns (Preston curve)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating high poverty (1 if above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+34;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is selected as the primary dependent variable as it is the most standardized metric representing overall quality of life and population health. In accordance with the Preston curve, GDP per capita demonstrates diminishing marginal returns with respect to life expectancy, so a natural logarithmic transformation (`log_GDP_per_capita`) is applied to linearize this relationship. Life expectancy itself remains on a linear scale to preserve direct interpretability in years. A categorical variable (`Continent`) is explicitly cast as a factor for region-fixed effects, and a dummy variable (`High_Poverty`) is generated based on a poverty headcount threshold.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept linear for standard Preston curve interpretation
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for skewed economic predictor
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above 30%, 0 otherwise)
+    Dummy_High_Poverty = if_else(Poverty > 30, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+35;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is selected as the dependent variable since it is the standard and most encompassing demographic indicator for overall quality of life. In accordance with macroeconomic health economics (the Preston curve), GDP per capita exhibits strong diminishing marginal returns and right skewness, making a natural logarithmic transformation standard. Similarly, incidence of tuberculosis is right-skewed and benefits from a log transformation. 'Continent' is converted to an explicit categorical factor variable, and a binary dummy variable ('High_Poverty') is constructed to satisfy the requirement of having both a dummy variable and a categorical feature in the regression design.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Continuous dependent variable
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformations for heavily right-skewed economic and epidemiological variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+36;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality-of-life analysis, `Life.expectancy` serves as the most standard and theoretically grounded dependent variable. It is bounded and generally follows a near-normal distribution across countries, making it well-suited in levels for direct linear interpretability (years of life gained/lost). 
+
+For the independent variables, `GDP.per.capita` exhibits classic right-skewness and follows the well-documented Preston curve relationship with life expectancy (diminishing marginal returns); hence, a logarithmic transformation (`log_GDP`) is applied to linearize this relationship. Similarly, disease burden metrics like `Incidence.of.tuberculosis` are right-skewed and benefit from a log transformation.
+
+To fulfill the model specifications:
+- `Continent` is explicitly cast as a multi-level categorical factor.
+- A binary dummy variable (`High_Poverty`) is constructed (e.g., indicator of poverty rate exceeding the sample median) to provide a clear indicator/dummy variable alongside the categorical factor.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in levels for direct interpretability
+    # Transformations on right-skewed predictors
+    log_GDP = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+37;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, 'Life.expectancy' is the most suitable dependent variable as it comprehensively reflects health, living standards, and societal well-being. A level (untransformed) specification for life expectancy preserves direct interpretability in years. 'GDP.per.capita' follows a classic log-linear relationship with life expectancy (the Preston curve) and is heavily right-skewed, justifying a natural log transformation. For categorical structure, 'Continent' serves as the multi-class categorical factor, and a binary dummy variable indicating high poverty rates ('High.poverty', 1 if above median, 0 otherwise) is created to capture threshold effects on quality of life.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years)
+    # Log-transforming highly skewed economic predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable as factor
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1) for high poverty
+    High_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+38;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most universally accepted metric for overall quality of life. In accordance with the Preston curve relationship in health economics, life expectancy has a concave relationship with income, making a natural log transformation of 'GDP.per.capita' statistically appropriate to linearize the relationship. The dependent variable 'Life.expectancy' is kept in linear scale to retain direct interpretability in years (or can be modeled as-is given its lack of extreme skewness). 'Continent' is retained and formatted as a multi-class categorical variable, and an explicit binary dummy variable ('high_rural') is created to capture structural rural-urban divides.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform right-skewed economic and epidemiological covariates
+    log_gdp_per_capita = log(GDP.per.capita),
+    log_tb_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., rural majority)
+    is_predominantly_rural = if_else(Rural.population > 50, 1L, 0L)
+  ) %>%
+  # Select and clean relevant regression variables
+  select(
+    Life.expectancy,          # Dependent variable
+    log_gdp_per_capita,       # Log-transformed independent variable
+    log_tb_incidence,
+    Population.ages,
+    Unemployment,
+    Poverty,
+    Access.to.electricity,
+    PM2.5.air.pollution,
+    Forest.area,
+    Continent,                # Categorical variable
+    is_predominantly_rural    # Dummy variable
+  )";FALSE;"Perfect Execution";5
+39;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For quality of life analysis, 'Life.expectancy' is the most direct and recognized dependent variable. The Preston curve demonstrates a well-established concave relationship between income and life expectancy; therefore, applying a natural log transformation to 'GDP.per.capita' linearizes this relationship. 'Continent' is retained as a multi-class categorical variable (factor). To meet the dummy variable requirement, we create a binary indicator (e.g., 'High_Poverty' where poverty exceeds the median, or an indicator for high access to electricity). Life expectancy itself is kept in linear scale as it is relatively symmetric across broad cross-country samples and directly interpretable.";95;"library(dplyr)
+
+prepared_dataset &lt;- real_dataset %&gt;%
+  mutate(
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty &gt; median(Poverty, na.rm = TRUE), 1, 0),
+    
+    # Log-transformed independent variable to account for diminishing marginal returns
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Optional log transform for skewed environmental / health burdens
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1)
+  )";FALSE;"Perfect Execution";5
+40;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy ('Life.expectancy') is the premier metric for quality of life. In macroeconomic health models (e.g., the Preston Curve), the relationship between life expectancy and GDP per capita is log-linear due to diminishing marginal health returns to income; thus, taking the natural logarithm of 'GDP.per.capita' is standard practice. Life expectancy itself is retained on its natural scale to preserve direct interpretability in years. 'Continent' serves as the multi-class categorical variable (converted to a factor), and a dummy variable (e.g., 'High_Poverty' or indicator for low electrification) is generated to fulfill model requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform right-skewed economic predictor (Preston Curve relationship)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+41;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the primary objective indicator for quality of life in global health economics. It is kept in natural scale (years) because standard Preston curve linear models regress life expectancy linearly on log-transformed economic predictors, allowing direct interpretability (e.g., years gained per % change in income).
+2. Independent Variable Transformations: `GDP.per.capita` and `Incidence.of.tuberculosis` are strongly right-skewed with multiplicative effects; applying a logarithmic transformation (log and log1p) linearizes their relationship with life expectancy and stabilizes variance.
+3. Categorical & Dummy Variables: `Continent` serves as a multi-category factor capturing geographic fixed effects. A dummy variable `High_Poverty` is engineered (1 if Poverty is above the median, 0 otherwise) to explicitly fulfill the binary indicator requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable is Life.expectancy (kept in original scale for interpretability)
+    Life_expectancy = Life.expectancy,
+    
+    # Scale transformations for skewed predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary: 1 if Poverty > median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+42;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most recognized and robust composite metric for quality of life in cross-national analyses. In accordance with the Preston curve, GDP per capita demonstrates diminishing marginal returns on life expectancy and is strongly right-skewed; thus, a logarithmic transformation is applied. Incidence of tuberculosis is also heavily right-skewed and benefits from a log transformation. 'Continent' serves as the multi-class categorical variable (factor), and an indicator variable 'Rural_Majority' (1 if rural population > 50%, 0 otherwise) is generated to satisfy the requirement for a dummy variable.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  # Dependent variable: Life.expectancy (linear scale is standard in Preston curve specifications)
+  # Independent variable scale transformations
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable (multi-level factor)
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1)
+    Rural_Majority = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+43;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it serves as the premier holistic indicator of quality of life and population health. Per standard econometric literature (e.g., the Preston curve), GDP per capita exhibits diminishing marginal returns with respect to health outcomes and is heavily right-skewed, warranting a natural log transformation. Life expectancy itself typically spans a restricted range (approx. 50–85 years) and exhibits near-normal residual behavior without transformation, keeping model coefficients directly interpretable in years. Continent is formatted as a polytomous categorical variable (factor), and a binary dummy variable ('high_unemployment') is created to indicate whether a country faces an elevated unemployment rate above 10%.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformation for right-skewed economic predictor
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable (Continent)
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable for labor market condition
+    high_unemployment = if_else(Unemployment > 10, 1L, 0L)
+  ) %>%
+  select(
+    Life.expectancy,
+    log_GDP_per_capita,
+    Continent,
+    high_unemployment,
+    everything()
+  )";FALSE;"Perfect Execution";5
+44;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most established dependent variable to proxy overall quality of life. The relationship between GDP per capita and life expectancy is famously non-linear (the Preston curve), making a logarithmic transformation of GDP per capita statistically necessary to achieve linearity and stabilize variance. Incidence of tuberculosis is typically right-skewed and benefits from a log transformation as well. Life expectancy is kept linear to allow direct interpretation of coefficients in terms of years of life. Continent is retained and explicitly cast as a multi-level categorical factor, and an urban majority dummy variable is created based on rural population to capture structural urbanization effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years of life expectancy)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if majority urban, 0 otherwise)
+    Is_Urban_Majority = if_else(Rural.population < 50, 1, 0),
+    
+    # Log transformations for heavily skewed predictors with diminishing returns
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1)
+  )";FALSE;"Perfect Execution";5
+45;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the standard metric representing quality of life. In Preston curve analysis, life expectancy is kept in its natural scale (years) to allow an intuitive semi-elasticity interpretation (years of life gained per percentage change in economic indicators).
+2. Scale Transformations: `GDP.per.capita` and `Incidence.of.tuberculosis` are strongly right-skewed and exhibit diminishing marginal returns regarding life expectancy; thus, a logarithmic transformation is applied.
+3. Categorical & Dummy Variables: `Continent` is converted to an explicit `factor` to fulfill the categorical variable requirement. A dummy variable `high_unemployment` (or `rural_majority`) is created as a binary indicator (1/0) using `if_else`.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable (kept linear for direct interpretation in years)
+    Life.expectancy = Life.expectancy,
+    
+    # Scale transformation for skewed predictors (Preston curve relationship)
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if rural population exceeds 50%, 0 otherwise)
+    is_rural_majority = if_else(Rural.population > 50, 1, 0)
+  )";FALSE;"Perfect Execution";5
+46;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most recognized quantitative proxy for quality of life. For independent variables, GDP per capita demonstrates diminishing marginal returns on life expectancy (the Preston curve) and extreme positive skewness, making a logarithmic transformation statistically necessary. Incidence of tuberculosis is also heavily right-skewed and benefits from a log transformation. The variable 'Continent' is encoded as an explicit multi-class categorical factor, and an additional binary dummy variable ('high_poverty') is derived to capture threshold effects of poverty on quality of life.";95;"library(dplyr)
+
+real_dataset_processed <- real_dataset %>%
+  mutate(
+    # Log transformations for heavily skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable explicitly cast as factor
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., above-median poverty threshold)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+47;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For quality of life analysis, 'Life.expectancy' serves as the standard, direct proxy for population health and well-being. According to the Preston curve, the relationship between life expectancy and GDP per capita exhibits diminishing returns; applying a natural logarithmic transformation to 'GDP.per.capita' linearizes this relationship while keeping 'Life.expectancy' in levels for intuitive interpretability. Right-skewed disease burden metrics like 'Incidence.of.tuberculosis' are also log-transformed. To fulfill the requirements, 'Continent' is encoded as a multi-category factor, and a dummy variable ('High_Poverty') is constructed using the median poverty threshold.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform highly skewed independent variables to ensure linear relationships
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (0/1 binary indicator based on median poverty level)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+48;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it directly reflects population health and overall quality of life. In line with the Preston Curve, GDP per capita exhibits strong diminishing marginal returns to life expectancy, making a logarithmic transformation (`log_GDP_per_capita`) statistically appropriate to linearize the relationship. The `Continent` variable is preserved/converted to a factor to serve as the categorical predictor. A binary dummy variable (`High_Poverty`) is derived to satisfy the dummy requirement and capture threshold effects of poverty on quality of life.";95;"library(dplyr)
+
+prepared_dataset &lt;- real_dataset %&gt;%
+  mutate(
+    # Categorical variable
+    Continent = as.factor(Continent),
+    # Log-transformed right-skewed economic predictor
+    log_GDP_per_capita = log(GDP.per.capita),
+    # Dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty &gt; median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+49;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, 'Life.expectancy' is the most established dependent variable as it directly reflects aggregate health outcomes and well-being. According to the economic Preston curve, the relationship between life expectancy and economic output is concave, making a logarithmic transformation of 'GDP.per.capita' statistically appropriate to linearize the relationship. Other highly skewed right-tailed predictors like 'Incidence.of.tuberculosis' also benefit from log-transformation. 'Continent' serves as the categorical variable (converted to factor), and a dummy variable 'Rural_majority' (1 if Rural.population > 50%, 0 otherwise) is created to fulfill the dummy requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (standard Preston curve formulation)
+    # Log-transformed independent variables to address right-skewness and non-linearity
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if rural population exceeds 50%, 0 otherwise)
+    Rural_majority = if_else(Rural.population > 50, 1, 0)
+  )";FALSE;"Perfect Execution";5
+50;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For quality of life analysis, `Life.expectancy` is the most standard and representative dependent variable. According to the Preston curve, the relationship between economic output and life expectancy exhibits diminishing marginal returns, making a natural log transformation of `GDP.per.capita` theoretically and statistically essential for a linear model. `Continent` serves as an ideal multi-class categorical predictor (encoded as a factor). To satisfy the dummy variable requirement, an indicator variable `is_africa` (or a high-poverty indicator) is created as a 0/1 binary feature.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (standard for life expectancy in OLS)
+    # Log-transforming heavily right-skewed economic predictor (Preston Curve)
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable explicitly converted to factor
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1)
+    is_africa = if_else(Continent == ""Africa"", 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+51;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, `Life.expectancy` is the most well-established dependent variable. It is generally modeled in its original scale (years) because it exhibits reasonable normality across countries and offers straightforward interpretability in linear regression. 
+
+Conversely, economic predictors such as `GDP.per.capita` follow the Preston curve—exhibiting severe right-skewness and diminishing marginal returns—making a logarithmic transformation (`log_gdp_per_capita`) statistically necessary to linearize the relationship. Other heavily skewed disease/burden metrics like `Incidence.of.tuberculosis` also benefit from a log transformation.
+
+For categorical structures:
+- `Continent` provides a multi-level categorical variable (nominal factor).
+- A binary dummy variable (e.g., `high_poverty` indicating poverty rates above the median or a threshold, or `rural_majority` where rural population > 50%) is derived to satisfy the requirement for at least one dummy variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Target variable: Life.expectancy (kept in natural scale)
+  # Independent variable log-transformations to handle skewness and diminishing returns
+  mutate(
+    log_gdp_per_capita = log(GDP.per.capita),
+    log_tb_incidence = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Ensure categorical variable is explicitly a factor
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create a binary dummy variable (1 if rural majority, 0 otherwise)
+  mutate(
+    dummy_rural_majority = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+52;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the optimal metric representing overall quality of life and population well-being. Keeping it in its original linear scale preserves intuitive interpretability (years of life).
+2. Transformations: `GDP.per.capita` follows the well-documented Preston curve (diminishing marginal returns to health), so a natural logarithmic transformation (`log_gdp`) linearizes its relationship with life expectancy. `Incidence.of.tuberculosis` is also right-skewed and benefits from a log transformation.
+3. Categorical & Dummy Variables: `Continent` serves as a multi-category factor variable, while a binary dummy variable (e.g., `high_poverty` indicating whether a country's poverty rate exceeds the sample median) is engineered to capture threshold effects.";95;"library(dplyr)
+
+prepared_data <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years)
+    # Log-transform right-skewed economic and epidemiological covariates
+    log_gdp = log(GDP.per.capita),
+    log_tb_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable (factor with >2 levels)
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty is above median, 0 otherwise)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+53;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy (`Life.expectancy`) is the most suitable dependent variable to represent quality of life. For the independent variables, GDP per capita (`GDP.per.capita`) exhibits diminishing marginal returns with respect to life expectancy (the Preston curve) and extreme positive skewness, making a logarithmic transformation (`log_GDP_per_capita`) statistically appropriate. `Continent` is retained as an explicit factor (categorical variable), and a binary dummy variable (`high_poverty`) is created based on the median poverty rate to capture threshold effects while satisfying the structural requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformation for right-skewed predictor (Preston curve relationship)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable explicitly defined as a factor
+    Continent = as.factor(Continent),
+    
+    # Creation of a dummy variable (binary 0/1) based on poverty threshold
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+54;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life study, `Life.expectancy` is the standard dependent variable representing overall population well-being and health outcomes. Econometrically, life expectancy has a concave relationship with income (the Preston Curve); therefore, `GDP.per.capita` is log-transformed to linearize its relationship with life expectancy. `Continent` is preserved as a multi-level categorical factor. An explicit binary indicator (dummy variable), `High_Poverty_Dummy`, is created based on the median poverty level to satisfy the dummy variable requirement while capturing threshold effects of deprivation.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (standard for life expectancy)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log-transform right-skewed independent economic and health indicators
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if poverty is above median, 0 otherwise)
+    High_Poverty_Dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+55;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality-of-life analysis, 'Life.expectancy' is the most established and interpretable dependent variable and is best left on its natural scale (years). 'GDP.per.capita' exhibits severe right-skewness and follows the Preston curve relationship with life expectancy, making a logarithmic transformation statistically essential to linearize the relationship. 'Incidence.of.tuberculosis' is also right-skewed and benefits from a log transformation. 'Continent' serves as the multi-class categorical variable (converted to a factor), and a dummy variable is created (e.g., 'high_poverty' or 'developed_access') to satisfy the requirement for at least one binary indicator variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformations for heavily skewed predictors exhibiting diminishing marginal returns
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable explicitly converted to factor
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty is above median, 0 otherwise)
+    high_poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+56;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most appropriate dependent variable to represent quality of life. The Preston curve demonstrates a well-established logarithmic relationship between economic output (GDP per capita) and life expectancy, reflecting diminishing marginal health returns to income; hence, `GDP.per.capita` is log-transformed while keeping `Life.expectancy` linear to maintain direct interpretability in years. Highly right-skewed disease burden metrics like `Incidence.of.tuberculosis` are also log-transformed (`log1p`). For model requirements, `Continent` is explicitly cast as a multi-class categorical variable (factor), and a binary dummy variable (`high_poverty`) is created based on the median poverty threshold.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for highly skewed economic and health regressors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable (multiple levels)
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1 indicator)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+57;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the premier metric for quality of life analysis, serving as an ideal continuous dependent variable without requiring log transformation because its distribution is generally bounded and reasonably symmetric across nations. In contrast, economic indicators like GDP per capita exhibit severe right-skewness and diminishing marginal returns relative to health outcomes (the Preston curve), making a logarithmic transformation statistically necessary. To meet the categorical and dummy variable requirements, 'Continent' is retained and formatted as a multi-category factor, while a binary dummy variable ('high_poverty') is constructed based on poverty rates to capture threshold structural effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable: Life.expectancy (left on original scale)
+    # Logarithmic transformation for skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1 indicator, e.g., poverty level above median/threshold of 40%)
+    high_poverty = if_else(Poverty > 40, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+58;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it is universally recognized as a primary objective indicator of quality of life and population health. 
+
+In linear regression models of quality of life (the Preston curve), GDP per capita exhibits strong diminishing marginal returns and right-skewness, making a natural logarithmic transformation (`log_gdp_per_capita`) statistically essential to linearize its relationship with life expectancy. In contrast, life expectancy is kept in its original linear scale (years) to maintain direct interpretability of coefficients (years gained per percentage change in economic indicators). 
+
+`Continent` is formatted as a multi-class categorical variable (factor) to capture regional fixed effects, and a dummy variable (`high_poverty`) is created via median split to satisfy the requirement of having at least one dummy variable.";98;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformation for right-skewed economic predictor (linearizes Preston curve)
+    log_gdp_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable for regional variation
+    continent_factor = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    high_poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+59;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most standard and holistic metric for quality of life in macroeconomic and demographic studies, making it the ideal dependent variable. According to the Preston Curve, the relationship between GDP per capita and life expectancy is concave; therefore, log-transforming 'GDP.per.capita' (and highly right-skewed disease counts like 'Incidence.of.tuberculosis') linearizes their associations while keeping 'Life.expectancy' on its natural, easily interpretable scale (years). 'Continent' serves as the multi-class categorical variable (converted to a factor), and a dummy variable ('High_Poverty') is created based on the median poverty rate to capture threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Handle scale transformations
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Ensure at least one categorical variable
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create at least one dummy variable (e.g., above-median poverty indicator)
+  mutate(
+    Poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  ) %>%
+  # Select and organize the variables for the regression model
+  select(
+    Life.expectancy,          # Dependent variable
+    log_GDP_per_capita,       # Log-transformed independent variable
+    log_Tuberculosis,         # Log-transformed independent variable
+    Poverty_dummy,            # Dummy variable
+    Continent,                # Categorical variable
+    Unemployment,
+    Access.to.electricity,
+    PM2.5.air.pollution,
+    Rural.population,
+    Forest.area
+  )";FALSE;"Perfect Execution";5
+60;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, 'Life.expectancy' is the most widely accepted and robust dependent variable, directly reflecting healthcare, standard of living, and overall well-being. It typically maintains a linear relationship with log-transformed GDP per capita (the Preston curve), so keeping life expectancy in its original scale (years) provides intuitive interpretation, while log-transforming 'GDP.per.capita' corrects for severe positive skewness and diminishing marginal returns. 'Continent' serves as the categorical variable (converted to a factor), and an indicator dummy variable 'urban_majority' (1 if Rural.population < 50%, 0 otherwise) is generated to account for structural urban/rural divides.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Dependent variable: Life.expectancy (kept linear for Preston curve interpretation)
+  # Log transformation of heavily skewed economic predictor (GDP per capita)
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Ensure categorical variable is formatted as factor
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create a dummy variable (1 if majority urban, 0 otherwise)
+  mutate(
+    urban_majority = if_else(Rural.population < 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+61;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"`Life.expectancy` is the standard metric representing quality of life in socioeconomic studies. Following the Preston curve in economics, `GDP.per.capita` exhibits strongly diminishing returns with respect to life expectancy and is right-skewed; thus, a natural logarithmic transformation (`log_gdp_per_capita`) is applied. `Life.expectancy` is kept on its original scale to maintain direct interpretability in years (semi-elasticity / log-linear relationship with GDP). For the categorical requirement, `Continent` is converted to an explicit factor. For the dummy variable, a binary indicator `high_poverty` (or `rural_majority`) is created based on a meaningful threshold.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable (kept linear for standard Preston curve interpretation)
+    life_expectancy = Life.expectancy,
+    
+    # Log transformation for right-skewed economic predictor
+    log_gdp_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable with multiple levels
+    continent = as.factor(Continent),
+    
+    # Dummy variable (binary indicator: 1 if rural population is >= 50%, 0 otherwise)
+    is_rural_majority = if_else(Rural.population >= 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+62;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"`Life.expectancy` is selected as the dependent variable as it is the most widely accepted metric for measuring overall quality of life and population health. In accordance with the Preston curve, `Life.expectancy` exhibits a logarithmic relationship with economic output; therefore, `GDP.per.capita` is log-transformed while keeping `Life.expectancy` in its natural scale (years) to maintain interpretability. `Continent` is preserved and cast as a categorical factor variable. Additionally, a binary dummy variable (`High_Poverty`) is constructed to capture structural thresholds in poverty (e.g., poverty rate > 40%).";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Continuous transformations
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary indicator)
+    High_Poverty = if_else(Poverty > 40, 1L, 0L)
+  ) %>%
+  select(
+    Life.expectancy,
+    log_GDP_per_capita,
+    High_Poverty,
+    Continent,
+    everything()
+  )";FALSE;"Perfect Execution";5
+63;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality-of-life analysis, `Life.expectancy` is the canonical dependent variable reflecting health, survival, and overall living standards. In development economics (the Preston curve), the relationship between `Life.expectancy` and economic output is concave, making a logarithmic transformation of `GDP.per.capita` essential for linearity. Highly right-skewed disease metrics like `Incidence.of.tuberculosis` also benefit from a log transformation. `Continent` serves as a polytomous categorical variable to capture regional fixed effects. A dummy variable `High_Poverty` is constructed (threshold at poverty > 40%) to satisfy the dummy variable requirement and capture threshold effects of severe deprivation.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformation for right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable for regional heterogeneity
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating high poverty rates
+    High_Poverty = if_else(Poverty > 40, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+64;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most established, comprehensive metric for quality of life and serves as the dependent variable. Since the relationship between GDP per capita and life expectancy is famously non-linear (the Preston curve), a logarithmic transformation on `GDP.per.capita` linearizes this relationship. Similarly, `Incidence.of.tuberculosis` exhibits strong right-skewness and is log-transformed. `Continent` serves as the multi-class categorical variable, while an indicator for high poverty (e.g., above median) provides a suitable dummy variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years) for direct interpretability
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformations for heavily right-skewed variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Multi-class categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if Poverty is above median, 0 otherwise)
+    High_Poverty_Dummy = as.integer(Poverty > median(Poverty, na.rm = TRUE))
+  )";FALSE;"Perfect Execution";5
+65;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable because it is universally recognized as a core indicator of health, development, and overall quality of life. For the independent variables, GDP per capita demonstrates strongly diminishing marginal returns with respect to quality of life (the Preston curve) and exhibits high right-skewness; applying a logarithmic transformation linearizes this relationship. Incidence of tuberculosis is also log-transformed due to standard right-skewed epidemiological counts. Life expectancy itself is retained on its natural scale to preserve direct, intuitive interpretability in years gained/lost. Finally, 'Continent' is retained and formatted as a multi-class categorical factor, and a dummy variable ('High_Poverty') is constructed based on median poverty to satisfy the regression design requirements.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable (kept linear for direct interpretability in years)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for highly skewed economic and health predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating above-median poverty levels
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+66;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the standard metric for assessing quality of life at a national level. In health economics (the Preston curve framework), life expectancy has an approximately linear relationship with the natural logarithm of economic output. Therefore, `Life.expectancy` is maintained on its natural scale (years) for direct interpretability, while `GDP.per.capita` is log-transformed to handle positive skewness and capture diminishing marginal returns.
+2. Independent Variable Transformations: `Incidence.of.tuberculosis` is also right-skewed and benefits from a log transformation (log1p).
+3. Categorical & Dummy Variables: `Continent` serves as a multi-category factor (categorical variable). We create a dummy variable `high_poverty` indicating whether a country's poverty rate exceeds the sample median (1 = High poverty, 0 = Low poverty).";95;"library(dplyr)
+
+# Data preprocessing for linear regression
+prepared_data <- real_dataset %>%
+  mutate(
+    # Dependent variable is Life.expectancy (linear scale for interpretability)
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if Poverty is above median, 0 otherwise)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L),
+    
+    # Log transformation for right-skewed economic/health metrics
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log1p(Incidence.of.tuberculosis)
+  )";FALSE;"Perfect Execution";5
+67;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it is the standard quantitative measure of health and quality of life across nations. GDP per capita exhibits strong right-skewness and diminishing marginal returns relative to life expectancy (the Preston curve), making a natural logarithmic transformation statistically necessary to linearize the relationship. The categorical predictor 'Continent' is converted to a factor, and a dummy variable 'high_poverty' is generated (1 if poverty is above the median, 0 otherwise) to capture threshold effects while satisfying the structural requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years of life) for linear interpretability
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Logarithmic transformation of GDP per capita to linearize relationship
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary indicator)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+68;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the standard metric representing overall quality of life in macroeconomic and public health studies.
+2. Transformations: The Preston curve empirically demonstrates a log-linear relationship between life expectancy and economic output; hence, `GDP.per.capita` is log-transformed (`log_GDP`). Similarly, disease burden metrics like `Incidence.of.tuberculosis` exhibit severe right-skewness and benefit from a log transformation.
+3. Categorical & Dummy Variables: `Continent` serves naturally as a multi-class categorical variable (converted to a factor). A binary dummy variable, `High_Poverty` (1 if Poverty > 30%, 0 otherwise), is created to fulfill the dummy requirement and capture non-linear welfare threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable is Life.expectancy (retained on natural scale for direct interpretability)
+    
+    # Skewed macroeconomic and health variables transformed to log scale
+    log_GDP = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable (multi-level factor)
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating severe poverty threshold
+    High_Poverty = if_else(Poverty > 30, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+69;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it directly quantifies population health and overall quality of life. In macroeconomic health models (the Preston curve), GDP per capita exhibits strong diminishing marginal returns and a right-skewed distribution, making a natural logarithmic transformation (log_gdp_per_capita) statistically essential. Incidence of tuberculosis is also log-transformed due to right skewness. To satisfy the requirement for categorical and dummy variables, 'Continent' is retained as a multi-class factor (categorical), and a binary dummy variable 'high_poverty' is constructed based on poverty threshold.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable: Life expectancy (retained on linear scale for interpretability in years)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformation for highly skewed economic and health indicators
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable (>2 levels)
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1 indicator)
+    high_poverty = if_else(Poverty >= median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+70;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"`Life.expectancy` is selected as the dependent variable since it is the primary benchmark indicator for quality of life and population health. 
+
+In line with established macroeconomic and health literature (the Preston Curve), `GDP.per.capita` exhibits diminishing marginal returns and strong right-skewness, making a logarithmic transformation (`log_gdp_per_capita`) statistically appropriate to linearize its relationship with life expectancy. `Incidence.of.tuberculosis` is also typically right-skewed and benefits from a log transformation. 
+
+For categorical and dummy structure:
+- `Continent` is preserved and cast as a multi-category factor.
+- A binary dummy indicator `high_unemployment` (or electricity access indicator) is derived to satisfy the dummy variable requirement.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  mutate(
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if access to electricity is high, >= 80%, else 0)
+    high_electricity_access = if_else(Access.to.electricity >= 80, 1L, 0L),
+    
+    # Scale transformations for right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis)
+  ) %>%
+  # Select and clean relevant regression variables
+  select(
+    Life.expectancy,          # Dependent variable
+    log_GDP_per_capita,       # Log-transformed independent variable
+    log_TB_incidence,         # Log-transformed independent variable
+    high_electricity_access,  # Dummy variable
+    Continent,                # Categorical variable
+    Unemployment,
+    Poverty,
+    PM2.5.air.pollution,
+    Rural.population
+  )";FALSE;"Perfect Execution";5
+71;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the primary metric for quality of life in macroeconomic and health outcomes, making it the most suitable dependent variable (kept in original units to facilitate direct interpretation of effects in years). GDP per capita exhibits a well-documented non-linear (diminishing marginal returns) relationship with life expectancy (the Preston curve) and extreme positive skewness, requiring a log-transformation (`log_GDP_per_capita`). Incidence of tuberculosis is also heavily right-skewed count-based incidence data, benefiting from a log-transformation. `Continent` is preserved as a multi-class categorical variable, and an explicit binary dummy variable (`High_Poverty_Dummy`) is created to indicate whether poverty is above the sample median.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transforming skewed economic and epidemiological variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., above-median poverty rate)
+    High_Poverty_Dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+72;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most standard, reliable, and holistic proxy for 'quality of life' in country-level econometric studies, making it the ideal dependent variable. To capture the well-established concave Preston curve relationship between economic output and life expectancy, GDP per capita is transformed to the logarithmic scale. The existing 'Continent' variable serves as the categorical factor to capture unobserved regional fixed effects. Additionally, a dummy variable indicating high poverty (poverty rate above median) is constructed to meet the binary indicator requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Ensure categorical variable is properly factored
+    Continent = as.factor(Continent),
+    
+    # Create a dummy variable (e.g., high poverty indicator)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L),
+    
+    # Log-transform highly skewed independent economic variables
+    log_GDP_per_capita = log(GDP.per.capita)
+  )";FALSE;"Perfect Execution";5
+73;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it serves as the most standard, reliable, and holistic metric for measuring the quality of life across nations. In line with the economic Preston curve, GDP per capita demonstrates diminishing marginal returns with respect to health and longevity; therefore, a natural logarithmic transformation (`log_GDP`) is applied to linearize this relationship and address right-skewness. Life expectancy remains untransformed to preserve direct interpretability in years. 'Continent' is structured as a multi-class categorical variable (factor), and an explicit binary dummy variable (`High_Poverty`) is generated indicating whether a country's poverty rate exceeds the median threshold.";100;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years) for direct interpretability
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log-transformation of GDP per capita to capture non-linear returns to life expectancy
+    log_GDP = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (1 if poverty exceeds median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+74;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, `Life.expectancy` is the most direct, standard, and comprehensive dependent variable. 
+
+Key preprocessing choices:
+1. Dependent Variable: `Life.expectancy` is maintained on the original scale (years) because it exhibits reasonable symmetry and retains direct, intuitive interpretability in linear regression coefficients.
+2. Independent Variable Transformations: Consistent with the economic Preston curve, `GDP.per.capita` exhibits severe right-skewness and diminishing marginal returns regarding life expectancy; taking `log(GDP.per.capita)` linearizes this relationship. Similarly, `Incidence.of.tuberculosis` is typically heavily right-skewed, so a log transformation (`log1p`) stabilizes variance.
+3. Categorical & Dummy Variables: `Continent` serves as an ideal multi-class categorical variable (converted to a factor). A dummy variable `high_poverty` (binary 0/1 indicator based on the median poverty rate) is created to meet the requirement and capture non-linear poverty threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable (kept linear for direct interpretability in years)
+    life_expectancy = Life.expectancy,
+    
+    # Scale transformations for skewed covariates
+    log_gdp_per_capita = log(GDP.per.capita),
+    log_tb_incidence = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable (multi-class)
+    continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1 indicator for above-median poverty)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+75;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it is universally recognized as a primary objective indicator of quality of life and population health. For independent variables, GDP per capita is transformed to its natural logarithm (log_GDP_per_capita) to capture the well-established diminishing marginal returns of income on life expectancy (the Preston curve). Tuberculosis incidence is also right-skewed and log-transformed. 'Continent' is retained and formatted as a multi-level categorical factor, while a binary dummy variable 'Urban_Majority' (1 if rural population is under 50%, 0 otherwise) is generated to satisfy the dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years) for direct interpretability
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Scale transformation for skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1 indicator)
+    Urban_Majority = if_else(Rural.population < 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+76;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For quality of life analysis, 'Life.expectancy' is the most established dependent variable. According to the Preston Curve, the relationship between life expectancy and economic output is concave, meaning life expectancy changes linearly with the logarithm of income; thus, 'GDP.per.capita' is log-transformed while keeping 'Life.expectancy' in its natural scale for direct interpretability in years. 'Incidence.of.tuberculosis' is also log-transformed to handle extreme right-skewness and multiplicative disease dynamics. 'Continent' is retained and formatted as a multi-class categorical factor, and a dummy variable 'High_Poverty' is created (1 if Poverty is above the median, 0 otherwise) to satisfy the dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformations for heavily right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty is above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+77;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is selected as the primary indicator of quality of life, as it directly captures population health, longevity, and overall living standards.
+2. Scale Transformation: Following the Preston Curve framework, `GDP.per.capita` exhibits diminishing marginal returns relative to health outcomes; applying a natural logarithmic transformation (`log_gdp_per_capita`) linearizes this relationship. `Life.expectancy` is kept in its linear scale to facilitate direct interpretation in years.
+3. Categorical & Dummy Variables: `Continent` serves as a multi-category factor to control for regional fixed effects. A binary dummy variable, `rural_majority`, is constructed (`Rural.population > 50`) to capture the structural divide between predominantly rural and urbanized nations.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years)
+    life_expectancy = Life.expectancy,
+    
+    # Log transformation of skewed economic predictor (Preston Curve)
+    log_gdp_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable for regional heterogeneity
+    continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating predominantly rural population
+    rural_majority = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+78;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the standard and most direct proxy for quality of life in cross-country analysis, making it the ideal dependent variable. According to the Preston Curve, the relationship between national income and life expectancy is concave with diminishing marginal returns; therefore, applying a log transformation to 'GDP.per.capita' (and potentially skewed disease incidence metrics) linearizes this relationship while keeping 'Life.expectancy' in natural units (years) for direct, intuitive coefficient interpretation. 'Continent' serves as the categorical variable (converted to a factor), and a binary dummy variable (e.g., 'Rural_majority' indicating whether rural population exceeds 50%) is created to satisfy the structural model requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (years) for interpretability
+    Life_expectancy = Life.expectancy,
+    
+    # Log transformations for heavily right-skewed predictors (Preston curve relationship)
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary indicator)
+    Rural_majority = if_else(Rural.population >= 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+79;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the canonical proxy for quality of life in cross-country econometric and public health analyses, serving as our dependent variable. While life expectancy is retained in its original linear scale for intuitive direct interpretability, the Preston curve dictates that the relationship between GDP per capita and life expectancy is strongly concave; thus, GDP per capita is log-transformed. Tuberculosis incidence is also right-skewed and benefits from a log transformation. 'Continent' is retained and properly factored as a multi-class categorical variable, and a binary dummy variable ('high_poverty') is constructed based on a 40% poverty headcount threshold to satisfy the dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Ensure categorical variable is explicitly a factor
+    Continent = as.factor(Continent),
+    
+    # Create at least one binary dummy variable (0 or 1)
+    high_poverty = if_else(Poverty >= 40, 1L, 0L),
+    
+    # Scale transformation for strongly skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_tuberculosis = log(Incidence.of.tuberculosis + 1)
+  )";FALSE;"Perfect Execution";5
+80;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, 'Life.expectancy' is the most suitable dependent variable. Economic indicators like 'GDP.per.capita' exhibit diminishing marginal returns on life expectancy (the Preston curve), making a logarithmic transformation statistically necessary to linearize the relationship. The 'Continent' variable provides the required multi-class categorical variable. A binary dummy variable ('High_Poverty' or 'High_Pollution') is generated to capture non-linear threshold effects.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale or log-transformed (natural scale is typical for life expectancy interpretation)
+    # Log transformation for right-skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if rural population > 50%, 0 otherwise)
+    Rural_majority = if_else(Rural.population > 50, 1, 0)
+  )";FALSE;"Perfect Execution";5
+81;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable because it serves as the most comprehensive, standardized indicator of overall quality of life and population health. 
+
+In terms of scaling and transformations:
+1. `GDP.per.capita` follows the well-documented Preston curve (diminishing marginal returns on life expectancy), making a logarithmic transformation (`log_gdp_per_capita`) necessary to linearize its relationship with life expectancy.
+2. `Incidence.of.tuberculosis` is typically heavily right-skewed and is transformed using `log()` to normalize its distribution and reduce the leverage of extreme outliers.
+3. `Life.expectancy` remains on its natural scale (years) to allow direct and intuitive interpretation of regression coefficients (e.g., a 1% increase in GDP corresponds to beta/100 years of life expectancy).
+4. `Continent` is preserved and formatted as a multi-class categorical variable (factor).
+5. A binary dummy variable (`high_poverty`) is generated based on whether poverty exceeds the median, satisfying the dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years) for direct interpretability
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformation for skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty is above median, 0 otherwise)
+    is_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+82;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy (`Life.expectancy`) is the premier metric for quality of life. The Preston curve demonstrates a strongly non-linear (logarithmic) relationship between GDP per capita and life expectancy due to diminishing marginal returns to income; thus, log-transforming `GDP.per.capita` is statistically essential. Life expectancy itself is generally left in levels for direct interpretability (years of life) and because it is reasonably symmetric across cross-country samples. `Continent` serves as the categorical variable (converted to a factor), and an explicit binary dummy variable (e.g., `high_poverty_dummy` based on whether poverty is above the sample median) is engineered to meet the specification requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in levels or modeled linearly
+    # Independent continuous variable transformation
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., poverty rate above median)
+    high_poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+83;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable as it directly quantifies overall population health and quality of life. In line with the empirical Preston curve, GDP per capita exhibits diminishing marginal returns and strong right-skewness, making a logarithmic transformation statistically appropriate. Tuberculosis incidence is similarly right-skewed and benefits from a log transform. The multi-class variable `Continent` is converted to a categorical factor, and a binary dummy variable `High_electricity_access` (1 if access >= 50%, 0 otherwise) is created to fulfill the requirement for at least one dummy and one categorical variable.";95;"library(dplyr)
+
+real_dataset_clean <- real_dataset %>%
+  mutate(
+    # Log-transform right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Ensure a categorical variable (multi-level factor)
+    Continent = as.factor(Continent),
+    
+    # Create at least one dummy variable (0/1)
+    High_electricity_access = if_else(Access.to.electricity >= 50, 1, 0)
+  )";FALSE;"Perfect Execution";5
+84;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable Selection: 'Life.expectancy' is the standard, most representative metric for quality of life in cross-country socio-economic analysis.
+2. Transformations: According to the Preston Curve, the relationship between life expectancy and economic output shows strong diminishing marginal returns; therefore, 'GDP.per.capita' is log-transformed. Right-skewed disease counts like 'Incidence.of.tuberculosis' are also log-transformed (using log1p to handle zeros safely). 'Life.expectancy' is kept linear to preserve intuitive unit interpretations (years of life).
+3. Categorical & Dummy Variables: 'Continent' is retained and formatted as a multi-category factor (categorical variable). A binary indicator, 'High_Poverty', is created using a median or standard threshold (e.g., poverty > 30% or median) to fulfill the explicit requirement for a dummy variable.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  # Target variable: Life.expectancy (kept in levels for standard interpretation)
+  # Log-transform highly skewed economic and epidemiological predictors
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log1p(Incidence.of.tuberculosis),
+    
+    # Ensure a categorical variable (multi-level factor)
+    Continent = as.factor(Continent),
+    
+    # Create an explicit dummy (binary indicator) variable
+    High_Poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+85;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most standard, reliable, and continuous metric reflecting overall quality of life. For predictors, GDP per capita demonstrates diminishing marginal returns on life expectancy (the Preston curve) and exhibits right-skewness, making a logarithmic transformation statistically appropriate. Continent is converted to a categorical factor, and a binary dummy variable indicating high poverty (above the median) is constructed to fulfill model specification requirements while preserving linear regression interpretability.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (standard for life expectancy)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log-transforming right-skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Ensuring categorical variable as a factor
+    Continent = as.factor(Continent),
+    
+    # Creating a dummy/binary variable (e.g., High Poverty indicator: 1 if above median, 0 otherwise)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+86;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the standard metric used to represent quality of life and population health. It exhibits roughly normal distribution across global populations and provides intuitive interpretability on its original scale.
+2. Transformations: `GDP.per.capita` exhibits severe positive skewness and follows the Preston curve relationship with life expectancy (diminishing marginal returns); hence, a natural log transformation (`log(GDP.per.capita)`) linearizes this relationship. Other heavily skewed count/rate variables such as `Incidence.of.tuberculosis` can also be log-transformed (with `+ 1` if necessary).
+3. Dummy & Categorical Variables: `Continent` serves as a multi-category factor (categorical variable), and a binary indicator `high_poverty` (1 if above median poverty, 0 otherwise) or `high_electricity_access` satisfies the requirement for a dummy variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Dependent variable: Life.expectancy (kept linear for interpretability)
+  # Independent variable transformation: Log-transform GDP per capita and TB incidence
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable (factor)
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary: 0 or 1)
+    high_poverty = if_else(Poverty >= median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+87;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable since it serves as the universally recognized primary quantitative indicator for quality of life and human development. In health economics (e.g., the Preston curve), GDP per capita exhibits strong diminishing marginal returns to life expectancy and is heavily right-skewed, making a logarithmic transformation (log_gdp) essential. Similarly, disease incidence like tuberculosis is typically highly right-skewed and benefits from a log transformation. The variable 'Continent' serves as the multi-class categorical variable (converted to a factor), and a dummy variable is created (e.g., high vs. low electricity access or high poverty flag) to meet the requirement of having at least one dummy indicator.";95;"library(dplyr)
+
+processed_dataset <- real_dataset %>%
+  # Target variable: Life.expectancy (linear scale preserves direct interpretability)
+  # Log transformations for heavily right-skewed continuous predictors
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Categorical variable
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Dummy variable: High poverty indicator (1 if above median poverty rate, 0 otherwise)
+  mutate(
+    dummy_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1, 0)
+  )";FALSE;"Perfect Execution";5
+88;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most widely recognized indicator for overall quality of life and serves as the dependent variable. In line with the Preston curve, GDP per capita demonstrates diminishing marginal returns and strong positive skewness, making a logarithmic transformation statistically necessary to linearize its relationship with life expectancy. Incidence of tuberculosis is also heavily right-skewed and benefits from a log transformation. 'Continent' is retained and converted into an explicit factor as the categorical variable. A binary dummy variable ('High_Poverty') is created using the sample median of Poverty to satisfy the dummy variable requirement and capture threshold effects of economic deprivation.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformations for heavily right-skewed economic and epidemiological drivers
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable explicitly cast as factor
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable indicating above-median poverty rate
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+89;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"For a quality of life analysis, `Life.expectancy` is the most statistically sound dependent variable as it directly reflects aggregate health outcomes, well-being, and living conditions. In contrast to `Life.expectancy` (which is typically maintained on a linear scale due to its relatively normal or slightly bounded distribution in cross-country panels), economic predictors such as `GDP.per.capita` exhibit severe right-skewness and diminishing marginal returns to health (the Preston curve); thus, a logarithmic transformation of `GDP.per.capita` linearizes this relationship. We retain `Continent` as a multi-class categorical variable and engineer a dummy variable (`Urban_Majority` indicating whether rural population is under 50%) to satisfy model specifications.";95;"library(dplyr)
+
+# Data preprocessing for linear regression
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (or log can be tested)
+    # Log-transforming skewed economic and health incidence predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable: Ensure Continent is an explicit factor
+    Continent = as.factor(Continent),
+    
+    # Dummy variable: 1 if predominantly urban (rural population < 50%), 0 otherwise
+    Urban_Majority = if_else(Rural.population < 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+90;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable as it is the most recognized quantitative indicator of overall quality of life. GDP per capita is log-transformed due to its well-documented log-linear relationship with life expectancy (the Preston curve) and right-skewness. Life expectancy remains in levels to preserve direct interpretability in years. 'Continent' is retained and cast as an explicit categorical (factor) variable, and a binary dummy variable ('High_Poverty') is created using a median split on the poverty rate to meet the dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Ensure categorical variable is explicitly a factor
+    Continent = as.factor(Continent),
+    
+    # Create a dummy variable (0 or 1) based on poverty threshold
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L),
+    
+    # Log-transform GDP per capita to capture diminishing marginal returns and reduce skewness
+    log_GDP_per_capita = log(GDP.per.capita)
+  )";FALSE;"Perfect Execution";5
+91;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable since it is the standard and most comprehensive objective measure of quality of life in demographic and socioeconomic research. Life expectancy typically exhibits a relatively symmetric distribution in cross-country datasets and is most naturally interpreted in raw units (years), so it is kept in linear scale. 
+
+GDP per capita demonstrates well-known diminishing marginal returns on human longevity (the Preston curve) and right-skewness, making a natural logarithmic transformation statistically necessary. Incidence of tuberculosis is also heavily right-skewed and benefits from a log transformation. 
+
+To satisfy the structural requirements, 'Continent' is encoded as an explicit categorical factor variable (multi-level), and a binary dummy variable ('high_unemployment' or 'is_europe') is created.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Explicit categorical variable with multiple levels
+  mutate(Continent = as.factor(Continent)) %>%
+  # Binary dummy variable (1 if high poverty rate > median poverty, 0 otherwise)
+  mutate(high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)) %>%
+  # Transform heavily skewed independent variables (e.g., GDP per capita via Preston curve)
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis + 1)
+  )";FALSE;"Perfect Execution";5
+92;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the primary dependent variable as it is the most standard, continuous metric representing overall population quality of life. In line with the Preston curve and econometric standards, GDP per capita demonstrates diminishing marginal returns to health outcomes and is heavily right-skewed, requiring a logarithmic transformation (log_GDP_per_capita). Incidence of tuberculosis is also log-transformed due to its typical right-skewed distribution. 'Continent' is retained as an explicit multi-category factor, and a dummy variable indicating high poverty (e.g., poverty rate above the median/threshold or a developed/developing indicator) is created to fulfill the requirements.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log transformation of skewed economic and epidemiological predictors
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Incidence_tb = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (e.g., high poverty rate defined by poverty > median or 35%)
+    High_Poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  ) %>%
+  select(
+    Life.expectancy,       # Dependent variable
+    log_GDP_per_capita,    # Transformed predictor
+    log_Incidence_tb,      # Transformed predictor
+    Continent,             # Categorical variable
+    High_Poverty,          # Dummy variable
+    everything()
+  )";FALSE;"Perfect Execution";5
+93;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the standard metric representing overall quality of life and population health. It is typically kept in its original linear scale (years) because it is bounded and directly interpretable.
+2. Logarithmic Transformations: `GDP.per.capita` and `Incidence.of.tuberculosis` exhibit severe right-skewness and follow diminishing returns relative to life expectancy (the classic Preston curve). Log-transforming them linearizes their relationships with the dependent variable.
+3. Categorical & Dummy Variables: `Continent` is preserved as a multi-category factor to capture regional fixed effects. A dummy variable `high_poverty` (1 if `Poverty` > median or a standard threshold such as 40%, 0 otherwise) is generated to capture binary socio-economic hardship.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Handle scale transformations for right-skewed predictors
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis)
+  ) %>%
+  # Ensure categorical variable is explicitly a factor
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create a binary dummy variable (e.g., high poverty indicator)
+  mutate(
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+94;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most standard and holistic indicator of quality of life in cross-country socio-economic analysis, making it the ideal dependent variable. The Preston Curve establishes a well-known logarithmic relationship between GDP per capita and life expectancy, representing diminishing marginal gains in health outcomes as wealth increases; thus, log-transforming GDP per capita is statistically appropriate. Similarly, disease incidence (tuberculosis) often exhibits extreme right-skewness and benefits from a log transformation. The 'Continent' feature serves as the categorical variable (converted to a factor), and an indicator dummy (e.g., 'High_Unemployment') satisfies the dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Scale transformation: log-transform GDP per capita and Tuberculosis incidence due to skewness
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log(Incidence.of.tuberculosis + 1),
+    
+    # Categorical variable explicitly cast to factor
+    Continent_cat = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1) representing high poverty (above median or standard threshold)
+    High_Poverty_dummy = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+95;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is chosen as the dependent variable because it is the standard and most direct quantitative indicator of overall quality of life. In health and development economics, the Preston Curve establishes a strong, concave relationship between income and life expectancy; therefore, applying a natural logarithmic transformation to GDP per capita linearizes this relationship and handles right-skewness. Life expectancy itself is maintained on its original scale to preserve direct interpretability in years. 'Continent' is retained and converted to an explicit multi-class categorical factor. Finally, a binary dummy variable (e.g., 'high_poverty', defined as Poverty > median) is created to satisfy the requirement for a dummy variable.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Log-transform highly skewed economic predictors with diminishing marginal returns
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if poverty rate is above the median, 0 otherwise)
+    dummy_high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+96;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the ideal dependent variable for assessing quality of life as it directly reflects aggregate health, healthcare access, and living standards. 
+In line with the Preston curve, GDP per capita displays diminishing returns and strong positive skewness, making a logarithmic transformation necessary to establish a linear relationship with life expectancy. 'Incidence.of.tuberculosis' is also right-skewed and benefits from a log transformation. 
+'Continent' is retained and encoded as a multi-class categorical factor. To meet the requirement for a dummy variable, a binary indicator 'High.Poverty' (or 'Majority.Rural') is created based on whether a country's rural population exceeds 50%.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Target variable: Life.expectancy (kept in natural scale for intuitive interpretation)
+  mutate(
+    # Log transformations for heavily right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_Tuberculosis = log1p(Incidence.of.tuberculosis),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Binary dummy variable (1 if rural population > 50%, 0 otherwise)
+    Rural_majority_dummy = if_else(Rural.population > 50, 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+97;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is the most standard, reliable, and comprehensive proxy for overall population quality of life. 
+
+Statistical rationale for transformations:
+1. Dependent Variable: `Life.expectancy` is kept on its natural linear scale because the Preston curve relationship is semi-logarithmic, meaning changes in life expectancy (in years) scale linearly with proportional/logarithmic changes in income.
+2. Independent Variable (`GDP.per.capita`): Subjected to a natural logarithmic transformation (`log_GDP`) to account for diminishing marginal returns on health outcomes and address right-skewness.
+3. Categorical Variable: `Continent` is converted to an explicit factor to capture multi-regional fixed effects across continents.
+4. Dummy Variable: A binary indicator (`High_Poverty`) is constructed (e.g., `Poverty >= median(Poverty, na.rm = TRUE)`) to capture threshold effects of severe deprivation on quality of life while fulfilling the requirement for a dummy variable.";95;"library(dplyr)
+
+# Data preprocessing for linear regression
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in natural scale (years), ensuring it is numeric
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log-transform highly skewed economic indicators (Preston curve specification)
+    log_GDP_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable with multiple levels
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1) for high poverty threshold
+    High_Poverty = if_else(Poverty >= median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+98;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy (`Life.expectancy`) is the premier indicator of quality of life and serves as the dependent variable. In line with the Preston curve, `GDP.per.capita` exhibits diminishing marginal returns and strong positive skewness, making a logarithmic transformation (`log_gdp_per_capita`) statistically appropriate. `Continent` is converted to a categorical factor to control for regional fixed effects. To satisfy the requirement for a dummy variable, a binary indicator `high_poverty` (or similar indicator, e.g., `is_developed_electricity` or based on poverty threshold) is created. Life expectancy is kept on its original scale to preserve direct interpretability in years.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale for direct interpretability in years
+    life_expectancy = Life.expectancy,
+    
+    # Log-transforming skewed economic predictor (GDP per capita)
+    log_gdp_per_capita = log(GDP.per.capita),
+    
+    # Categorical variable
+    continent = as.factor(Continent),
+    
+    # Binary/Dummy variable (1 if Poverty rate is above 30%, 0 otherwise)
+    high_poverty = if_else(Poverty > 30, 1, 0)
+  )";FALSE;"Perfect Execution";5
+99;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"Life expectancy is selected as the primary dependent variable as it is the most recognized objective proxy for overall quality of life. In accordance with the Preston curve in development economics, Life expectancy is left on its natural scale (years) to maintain direct interpretability, while GDP per capita is log-transformed due to severe right-skewness and diminishing marginal returns on longevity. Incidence of tuberculosis is also log-transformed to stabilize variance. Continent is converted to a multi-category factor to satisfy the categorical variable requirement and capture regional fixed effects, and a binary dummy variable (`high_poverty`) is generated indicating whether poverty exceeds the sample median.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  mutate(
+    # Dependent variable kept in linear scale (standard for Preston curve analysis)
+    Life.expectancy = as.numeric(Life.expectancy),
+    
+    # Log transformations for heavily right-skewed independent variables
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_TB_incidence = log(Incidence.of.tuberculosis),
+    
+    # Categorical variable
+    Continent = as.factor(Continent),
+    
+    # Dummy variable (binary 0/1 indicator)
+    high_poverty = if_else(Poverty > median(Poverty, na.rm = TRUE), 1L, 0L)
+  )";FALSE;"Perfect Execution";5
+100;"Pre-processing";"log(Life.expectancy), as.factor(Continent), ifelse, log(GDP.per.capita)";"1. Dependent Variable: `Life.expectancy` is the gold standard indicator for quality of life in cross-national comparative analyses. It is bounded and typically kept in its linear level to preserve direct interpretability (years of life).
+2. Logarithmic Transformations: In accordance with the Preston curve, `GDP.per.capita` exhibits strongly diminishing marginal returns with respect to life expectancy and is heavily right-skewed; thus, a natural log transformation (`log_GDP_per_capita`) is statistically appropriate. Similarly, `Incidence.of.tuberculosis` shows extreme right skew and is log-transformed.
+3. Categorical Variable: `Continent` is preserved and converted to a standard `factor` to account for regional fixed effects.
+4. Dummy Variable: A binary indicator `high_poverty_dummy` (or `rural_majority_dummy`, defined as `Rural.population > 50`) is created to satisfy the explicit dummy variable requirement.";95;"library(dplyr)
+
+prepared_dataset <- real_dataset %>%
+  # Handle scale transformations for skewed variables
+  mutate(
+    log_GDP_per_capita = log(GDP.per.capita),
+    log_tb_incidence = log(Incidence.of.tuberculosis + 1)
+  ) %>%
+  # Ensure continent is treated as a nominal categorical variable (factor)
+  mutate(
+    Continent = as.factor(Continent)
+  ) %>%
+  # Create a dummy variable (e.g., indicator for majority rural population: 1 if > 50%, 0 otherwise)
+  mutate(
+    rural_majority_dummy = if_else(Rural.population > 50, 1L, 0L)
+  ) %>%
+  # Select and organize relevant variables with Life.expectancy as the primary outcome
+  select(
+    Life.expectancy,
+    log_GDP_per_capita,
+    log_tb_incidence,
+    rural_majority_dummy,
+    Continent,
+    Population.ages,
+    Unemployment,
+    Poverty,
+    Access.to.electricity,
+    PM2.5.air.pollution,
+    Forest.area
+  )";FALSE;"Perfect Execution";5
