@@ -1,0 +1,2 @@
+"error_reasoning";"n"
+"The student incorrectly identified the model specification as log-level instead of log-log. Consequently, they misinterpreted the coefficient as representing a semi-elasticity for a 1-unit increase in GDP per capita rather than an elasticity, leading to unit confusion and an incorrect applied calculation for a 5% increase.";100
