@@ -1,0 +1,29 @@
+--- EXAMPLES OF LLM-GENERATED PERSONAS (CLEAN RUNS) ---
+
+[Run 31]:
+**Archetype & Persona:** **"The Mindful Couturier" (Léonie, 32)** – An enlightened tastemaker redefining Haute Parfumerie through radical individuality and holistic wellness.  
+**Core Olfactory Driver:** Completely rejects mass-market prestige, passionately demanding bespoke, made-to-measure scent formulations tailored strictly to her identity (Q32_5: +1.15).  
+**Wellness & Clean Standards:** Views skin biocompatibility as essential luxury, requiring certified allergen-free and hypoallergenic purity (Q32_4: +0.88).  
+**Eco-Accountability:** Anchored in sustainability (Q11_8: +0.93), prioritizing circular refill rituals, eco-designed packaging, and ethically harvested Grasse botanicals.  
+**Visual Moodboard:** Luminous botanical minimalism—warm sunlight piercing laboratory pipettes, raw neutral linens, and custom-monogrammed crystal flacons.  
+**Campaign Hook:** Position Dior’s private atelier at the intersection of green science and bespoke craft: *"Your singular essence, crafted for pure skin, devoted to the earth."*
+--------------------------------------------------
+
+[Run 79]:
+**Archetype & Identity:** **"The Bespoke Purist" (Valentin, 33)** – An enlightened tastemaker demanding extreme personal distinctiveness through clean, conscious luxury.  
+**Primary Driver:** Hyper-focused on individuality; passionately rejects off-the-shelf fragrances in favor of bespoke, made-to-measure formulations crafted for his unique body chemistry (Q32_5: +1.15).  
+**Purity & Wellness:** Uncompromising dermatological standards, viewing certified allergen-free and hypoallergenic compositions as non-negotiable luxury baselines (Q32_4: +0.88).  
+**Environmental Ethics:** Strongly anchored in sustainability (Q11_8: +0.93), actively expecting circular refill rituals, lightweight eco-glass, and ethically sourced French botanicals.  
+**Visual Aesthetic:** Organic architectural minimalism—crisp ecru tailoring, warm morning light washing over precision laboratory glassware, and custom-monogrammed crystal decanters.  
+**Campaign Activation:** Position Dior’s private atelier at the frontier of green biotechnology and bespoke couture: *"Your singular signature—crafted for pure skin, consecrated to the earth."*
+--------------------------------------------------
+
+[Run 51]:
+**Archetype & Persona:** **"The Conscious Couturier" (Camille, 32)** – An enlightened aesthete redefining Haute Parfumerie through radical individuality and holistic clean luxury.  
+**Olfactory Driver:** Bypasses off-the-shelf commercial icons, passionately demanding bespoke, made-to-measure fragrances crafted to her personal skin chemistry (Q32_5: +1.15).  
+**Clean Standards:** Uncompromising on dermatological health, mandating certified hypoallergenic and allergen-free formulas as baseline luxury requirements (Q32_4: +0.88).  
+**Eco-Ethics:** Strongly driven by ecological stewardship (Q11_8: +0.93), prioritizing circular refill rituals, lightweight glass, and regeneratively farmed Grasse botanicals.  
+**Visual & Spatial Mood:** Organic couture minimalism—morning sunlight piercing apothecary glassware, raw neutral linen tailoring, and custom-monogrammed crystal flacons.  
+**Advertising Activation:** Position Dior’s private atelier at the frontier of green biotechnology and bespoke luxury: *"Your singular signature, distilled for pure skin, consecrated to the earth."*
+--------------------------------------------------
+
